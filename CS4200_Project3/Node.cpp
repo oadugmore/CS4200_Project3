@@ -1,10 +1,12 @@
 #include "Node.h"
 
 
-Node::Node()
+Node::Node(array<array<char, 8>, 8> state)
 {
+    this->state = state;
+    //this->value = value;
+    //this->isTerminal = isTerminal;
 }
-
 
 Node::~Node()
 {
@@ -12,7 +14,8 @@ Node::~Node()
 
 int Node::GetValue()
 {
-    return value;
+    //return value;
+    throw exception("Use IsolationEngine methods for this.");
 }
 
 array<array<char, 8>, 8> Node::GetState()
@@ -23,4 +26,5 @@ array<array<char, 8>, 8> Node::GetState()
 bool Node::IsTerminal()
 {
     return isTerminal;
+    throw exception("Use IsolationEngine methods for this.");
 }

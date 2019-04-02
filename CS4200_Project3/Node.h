@@ -7,7 +7,7 @@ using namespace std;
 class Node
 {
 public:
-    Node();
+    Node(array<array<char, 8>, 8> state);
     ~Node();
     int GetValue();
     array<array<char, 8>, 8> GetState();

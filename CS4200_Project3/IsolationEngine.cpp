@@ -32,6 +32,16 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
     return successors;
 }
 
+int IsolationEngine::Utility(Node n)
+{
+    return 0;
+}
+
+bool IsolationEngine::TerminalTest(Node n)
+{
+    
+}
+
 void IsolationEngine::GameLoop()
 {
     bool gameOver = false;

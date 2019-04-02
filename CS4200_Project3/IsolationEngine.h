@@ -1,18 +1,19 @@
 #pragma once
 
 #include "UserInterface.h"
-#include "Node.h"
-#include <vector>
+#include "GameEngine.h"
 
 using namespace std;
 
-class IsolationEngine
+class IsolationEngine : public GameEngine
 {
 public:
 	IsolationEngine();
 	~IsolationEngine();
 	void Start();
     vector<Node> GetSuccessors(Node n);
+    int Utility(Node n);
+    bool TerminalTest(Node n);
 
 private: 
 	UserInterface ui;

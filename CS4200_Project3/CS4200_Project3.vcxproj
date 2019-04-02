@@ -158,6 +158,7 @@
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameEngine.h" />
     <ClInclude Include="IsolationEngine.h" />
     <ClInclude Include="MiniMax.h" />
     <ClInclude Include="Node.h" />
