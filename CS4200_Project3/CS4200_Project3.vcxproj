@@ -152,6 +152,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CS4200_Project3.cpp" />
+    <ClCompile Include="IsolationEngine.cpp" />
+    <ClCompile Include="MiniMax.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="UserInterface.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IsolationEngine.h" />
+    <ClInclude Include="MiniMax.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="UserInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
