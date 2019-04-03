@@ -28,7 +28,10 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, bool cacheMinResul
     vector<Node> successors = gameEngine->GetSuccessors(currentState);
     for (int i = 0; i < successors.size(); i++)
     {
-        v = Max(v, MinValue(successors[i], alpha, beta));
+        int min = MinValue(successors[i], alpha, beta);
+        if (cacheMinResults)
+            hashTable[min] = successors[i];
+        v = Max(v, min);
         if (v >= beta) return v;
         alpha = Max(alpha, v);
     }
@@ -37,7 +40,18 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, bool cacheMinResul
 
 int MiniMax::MinValue(Node currentState, int alpha, int beta)
 {
-    return 0;
+    if (gameEngine->TerminalTest(currentState))
+        return gameEngine->Utility(currentState);
+
+    int v = INT_MIN;
+    vector<Node> successors = gameEngine->GetSuccessors(currentState);
+    for (int i = 0; i < successors.size(); i++)
+    {
+        v = Min(v, MaxValue(successors[i], alpha, beta, false));
+        if (v <= alpha) return v;
+        beta = Min(beta, v);
+    }
+    return v;
 }
 
 int MiniMax::Max(int a, int b)
