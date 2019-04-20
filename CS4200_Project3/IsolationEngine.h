@@ -17,6 +17,7 @@ public:
 
 private: 
 	UserInterface ui;
+	bool gameOver;
 	void GameLoop();
 	void ComputerTurn();
 	void AdversaryTurn();

@@ -44,7 +44,6 @@ bool IsolationEngine::TerminalTest(Node n)
 
 void IsolationEngine::GameLoop()
 {
-    bool gameOver = false;
 	if (ui.ComputerStarts())
 	{
         ComputerTurn();
