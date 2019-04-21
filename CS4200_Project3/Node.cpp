@@ -1,9 +1,10 @@
 #include "Node.h"
 
 
-Node::Node(array<array<char, 8>, 8> state)
+Node::Node(array<array<char, 8>, 8> state, bool playerTurn)
 {
     this->state = state;
+	isPlayerTurn = playerTurn;
     //this->value = value;
     //this->isTerminal = isTerminal;
 }
@@ -25,6 +26,11 @@ array<array<char, 8>, 8> Node::GetState()
 
 bool Node::IsTerminal()
 {
-    return isTerminal;
+    //return isTerminal;
     throw exception("Use IsolationEngine methods for this.");
+}
+
+bool Node::IsPlayerTurn()
+{
+	return isPlayerTurn;
 }
