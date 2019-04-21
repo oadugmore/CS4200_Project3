@@ -21,11 +21,12 @@ Node MiniMax::AlphaBetaSearch(Node currentState)
 
 int MiniMax::MaxValue(Node currentState, int alpha, int beta, bool cacheMinResults)
 {
-    if (gameEngine->TerminalTest(currentState)) 
+	vector<Node> successors = gameEngine->GetSuccessors(currentState);
+	// terminal test
+    if (successors.empty()) 
         return gameEngine->Utility(currentState);
 
     int v = INT_MIN;
-    vector<Node> successors = gameEngine->GetSuccessors(currentState);
     for (int i = 0; i < successors.size(); i++)
     {
         int min = MinValue(successors[i], alpha, beta);
@@ -40,11 +41,12 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, bool cacheMinResul
 
 int MiniMax::MinValue(Node currentState, int alpha, int beta)
 {
-    if (gameEngine->TerminalTest(currentState))
+	vector<Node> successors = gameEngine->GetSuccessors(currentState);
+	// terminal test
+	if (successors.empty())
         return gameEngine->Utility(currentState);
 
     int v = INT_MIN;
-    vector<Node> successors = gameEngine->GetSuccessors(currentState);
     for (int i = 0; i < successors.size(); i++)
     {
         v = Min(v, MaxValue(successors[i], alpha, beta, false));
