@@ -1,10 +1,11 @@
 #include "Node.h"
 
 
-Node::Node(array<array<char, 8>, 8> state, bool playerTurn)
+Node::Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove)
 {
     this->state = state;
-	isPlayerTurn = playerTurn;
+	this->isPlayerTurn = playerTurn;
+	this->lastMove = lastMove;
     //this->value = value;
     //this->isTerminal = isTerminal;
 }
@@ -33,4 +34,9 @@ bool Node::IsTerminal()
 bool Node::IsPlayerTurn()
 {
 	return isPlayerTurn;
+}
+
+array<int, 2> Node::LastMove()
+{
+	return lastMove;
 }

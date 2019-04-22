@@ -23,7 +23,7 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, bool cacheMinResul
 {
 	vector<Node> successors = gameEngine->GetSuccessors(currentState);
 	// terminal test
-    if (successors.empty()) 
+    if (successors.empty())
         return gameEngine->Utility(currentState);
 
     int v = INT_MIN;

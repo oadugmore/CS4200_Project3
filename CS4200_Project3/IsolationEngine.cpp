@@ -87,7 +87,7 @@ Node move(Node current, int currentX, int currentY, int newX, int newY)
 	array<array<char, 8>, 8> newState = current.GetState();
 	newState[currentX][currentY] = '#';
 	newState[newX][newY] = player;
-	return Node(newState, !current.IsPlayerTurn());
+	return Node(newState, !current.IsPlayerTurn(), { newX, newY });
 }
 
 void findPlayer(Node n, int& x, int& y)
