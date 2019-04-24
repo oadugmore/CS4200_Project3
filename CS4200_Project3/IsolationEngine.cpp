@@ -18,6 +18,29 @@ void IsolationEngine::Start()
 	GameLoop();
 }
 
+void IsolationEngine::GameLoop()
+{
+	if (ui.ComputerStarts())
+	{
+		ComputerTurn();
+	}
+	while (!gameOver)
+	{
+		AdversaryTurn();
+		ComputerTurn();
+	}
+}
+
+void IsolationEngine::ComputerTurn()
+{
+
+}
+
+void IsolationEngine::AdversaryTurn()
+{
+
+}
+
 vector<Node> IsolationEngine::GetSuccessors(Node n)
 {
     vector<Node> successors;
@@ -125,26 +148,5 @@ bool IsolationEngine::TerminalTest(Node n)
     
 }
 
-void IsolationEngine::GameLoop()
-{
-	if (ui.ComputerStarts())
-	{
-        ComputerTurn();
-	}
-    while (!gameOver)
-    {
-        AdversaryTurn();
-        ComputerTurn();
-    }
-}
-
-void IsolationEngine::ComputerTurn()
-{
-
-}
-
-void IsolationEngine::AdversaryTurn()
-{
-}
 
 
