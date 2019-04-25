@@ -155,6 +155,7 @@
     <ClCompile Include="IsolationEngine.cpp" />
     <ClCompile Include="MiniMax.cpp" />
     <ClCompile Include="Node.cpp" />
+    <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="UserInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +163,8 @@
     <ClInclude Include="IsolationEngine.h" />
     <ClInclude Include="MiniMax.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="UserInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

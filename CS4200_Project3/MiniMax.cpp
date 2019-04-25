@@ -1,28 +1,35 @@
 #include "MiniMax.h"
-
+#include <chrono>
 
 
 MiniMax::MiniMax(GameEngine* gameEngine)
 {
     this->gameEngine = gameEngine;
+	firstMove = true;
 }
 
 
-MiniMax::~MiniMax()
+Node MiniMax::GetMove()
 {
+	int depth = 1;
+	auto startTime = chrono::high_resolution_clock::now();
+	if (firstMove)
+	{
+		return AlphaBetaRandomBest
+	}
+
 }
 
-Node MiniMax::AlphaBetaSearch(Node currentState)
+Node MiniMax::AlphaBetaSearch(Node currentState, int depth)
 {
-    // initialize hash table
-    //int v = MaxValue(currentState, INT_MIN, INT_MAX, true);
-		
 	vector<Node> successors = gameEngine->GetSuccessors(currentState);
-	// terminal test
+
+	// terminal test:
+	// this is the current state of the board
+	// so no need to check depth
 	if (successors.empty())
 	{
-		// this is a terminal state?
-		//return gameEngine->Utility(currentState);
+		return currentState;
 	}
 
 	int v = INT_MIN;
@@ -30,29 +37,68 @@ Node MiniMax::AlphaBetaSearch(Node currentState)
 	int beta = INT_MAX;
 	for (int i = 0; i < successors.size(); i++)
 	{
-		int min = MinValue(successors[i], alpha, beta);
+		int min = MinValue(successors[i], alpha, beta, depth - 1);
 
 		v = Max(v, min);
 		if (v >= beta) break;
 		alpha = Max(alpha, v);
+		hashTable[min] = successors[i];
 	}
-	//return v;
 
-	hashTable[min] = successors[i];
     return hashTable[v];
 }
 
-int MiniMax::MaxValue(Node currentState, int alpha, int beta)
+Node MiniMax::AlphaBetaRandomBest(Node currentState, int depth)
 {
 	vector<Node> successors = gameEngine->GetSuccessors(currentState);
+	vector<Node> bestOptions;
+
+	// terminal test: shouldn't be necessary
+	// because this is called for the first move
+	if (successors.empty())
+	{
+		return currentState;
+	}
+
+	int v = INT_MIN;
+	int bestValue = v;
+	int alpha = INT_MIN;
+	int beta = INT_MAX;
+	for (int i = 0; i < successors.size(); i++)
+	{
+		int min = MinValue(successors[i], alpha, beta, depth - 1);
+
+
+		// if we found a better value than before,
+		// clear the old "best" options
+		if (min > v)
+			bestOptions.clear();
+
+		// if we found a value at least as good as before,
+		// add it to the list of best options
+		if (min >= v)
+			bestOptions.push_back(successors[i]);
+
+		v = Max(v, min);
+		//if (v >= beta)
+			//break;
+		alpha = Max(alpha, v);
+		//hashTable[min] = successors[i];
+	}
+}
+
+int MiniMax::MaxValue(Node currentState, int alpha, int beta, int depth)
+{
+	vector<Node> successors = gameEngine->GetSuccessors(currentState);
+
 	// terminal test
-    if (successors.empty())
+    if (successors.empty() || depth == 0)
         return gameEngine->Utility(currentState);
 
     int v = INT_MIN;
     for (int i = 0; i < successors.size(); i++)
     {
-        int min = MinValue(successors[i], alpha, beta);
+        int min = MinValue(successors[i], alpha, beta, depth - 1);
         
         v = Max(v, min);
         if (v >= beta)
@@ -62,17 +108,18 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta)
     return v;
 }
 
-int MiniMax::MinValue(Node currentState, int alpha, int beta)
+int MiniMax::MinValue(Node currentState, int alpha, int beta, int depth)
 {
 	vector<Node> successors = gameEngine->GetSuccessors(currentState);
+
 	// terminal test
-	if (successors.empty())
+	if (successors.empty() || depth == 0)
         return gameEngine->Utility(currentState);
 
     int v = INT_MIN;
     for (int i = 0; i < successors.size(); i++)
     {
-        v = Min(v, MaxValue(successors[i], alpha, beta, false));
+        v = Min(v, MaxValue(successors[i], alpha, beta, depth - 1));
         if (v <= alpha)
 			break;
         beta = Min(beta, v);
