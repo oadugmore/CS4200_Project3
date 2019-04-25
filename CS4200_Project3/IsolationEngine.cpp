@@ -14,36 +14,44 @@ IsolationEngine::~IsolationEngine()
 void IsolationEngine::Start()
 {
 	// initialize game engine
+	int timeout = ui.GetTimeLimit();
+	computer = make_unique<MiniMax>(this, timeout);
+	opponent = make_unique<Opponent>(&ui);
 
 	GameLoop();
 }
 
 void IsolationEngine::GameLoop()
 {
-	if (ui.ComputerStarts())
+	Node currentState;
+	SwitchTurns(ui.ComputerStarts());
+
+	while (true)
 	{
-		ComputerTurn();
-	}
-	while (!gameOver)
-	{
-		AdversaryTurn();
-		ComputerTurn();
+		currentState = currentPlayer->GetMove(currentState);
+		ui.DisplayBoard(currentState);
+		SwitchTurns(!computerTurn);
+
 	}
 }
 
-void IsolationEngine::ComputerTurn()
+void IsolationEngine::SwitchTurns(bool computerTurnNext)
 {
-
-}
-
-void IsolationEngine::AdversaryTurn()
-{
-
+	if (computerTurnNext)
+	{
+		currentPlayer = &*computer;
+		computerTurn = true;
+	}
+	else
+	{
+		currentPlayer = &*opponent;
+		computerTurn = false;
+	}
 }
 
 vector<Node> IsolationEngine::GetSuccessors(Node n)
 {
-    vector<Node> successors;
+	vector<Node> successors;
 	array<array<char, 8>, 8> state = n.GetState();
 	int posX, posY;
 	findPlayer(n, posX, posY);
@@ -96,7 +104,7 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 		checkY++;
 	}
 
-    return successors;
+	return successors;
 }
 
 bool positionExists(int x, int y)
@@ -140,12 +148,12 @@ bool isOccupied(Node n, int x, int y)
 
 int IsolationEngine::Utility(Node n)
 {
-    return 0;
+	return 0;
 }
 
 bool IsolationEngine::TerminalTest(Node n)
 {
-    
+
 }
 
 

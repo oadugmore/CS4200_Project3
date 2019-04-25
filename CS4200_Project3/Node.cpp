@@ -1,6 +1,5 @@
 #include "Node.h"
 
-
 Node::Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove)
 {
     this->state = state;
@@ -8,6 +7,11 @@ Node::Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMo
 	this->lastMove = lastMove;
     //this->value = value;
     //this->isTerminal = isTerminal;
+}
+
+// Default constructor, only use as placeholder
+Node::Node()
+{
 }
 
 Node::~Node()

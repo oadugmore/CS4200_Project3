@@ -5,5 +5,5 @@
 class Player
 {
 public:
-	virtual Node GetMove() = 0;
+	virtual Node GetMove(Node currentState) = 0;
 };

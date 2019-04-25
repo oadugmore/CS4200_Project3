@@ -1,5 +1,7 @@
 #include "UserInterface.h"
 
+const int ROW_COUNT = 8;
+
 int UserInterface::GetTimeLimit()
 {
     cout << "Enter the time limit, in seconds: ";
@@ -23,8 +25,12 @@ bool UserInterface::ComputerStarts()
     char input;
     for (;;)
     {
-        if (cin >> input && (input == 'C' || input == 'c' || input == 'O' || input == 'o'))
-            return (input == 'C' || input == 'c');
+		if (cin >> input && (input == 'C' || input == 'c' || input == 'O' || input == 'o'))
+		{
+            bool computerStarts = (input == 'C' || input == 'c');
+			vsMessage = computerStarts ? "Computer vs. Opponent" : "Opponent vs. Computer";
+			return computerStarts;
+		}
         else
         {
             cout << "Please enter either C or O." << endl;
@@ -34,14 +40,14 @@ bool UserInterface::ComputerStarts()
     }
 }
 
-string UserInterface::GetMove()
+array<int, 2> UserInterface::GetMove()
 {
-    cout << "Enter a move: ";
+    cout << "Enter opponent's move: ";
     string input;
     for (;;)
     {
-        if (cin >> input && ValidMove(input))
-            return input;
+		if (cin >> input && ValidMove(input))
+			return { CharToInt(input[0]), input[1] };
         else
         {
             cout << "Please enter a move in the form A1, E6, etc." << endl;
@@ -61,7 +67,28 @@ bool UserInterface::ValidMove(string move)
     return true;
 }
 
-
-void UserInterface::DisplayBoard()
+int UserInterface::CharToInt(char c)
 {
+	char letter = __ascii_tolower(c);
+	return (letter - 'a');
+}
+
+char UserInterface::IntToChar(int i)
+{
+	return ('A' + i);
+}
+
+
+void UserInterface::DisplayBoard(Node board)
+{
+	cout << " 1 2 3 4 5 6 7 8\t" << vsMessage << endl;
+
+	auto computerMove = board.LastMove();
+
+	int lines = 0;
+	while (lines < ROW_COUNT || )
+	{
+
+	}
+	
 }

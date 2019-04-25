@@ -8,6 +8,7 @@ class Node
 {
 public:
     Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove);
+	Node();
     ~Node();
     int GetValue();
     array<array<char, 8>, 8> GetState();

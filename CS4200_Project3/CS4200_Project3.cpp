@@ -1,6 +1,10 @@
 #include <iostream>
+#include "IsolationEngine.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    std::cout << "Welcome to ISOLATION." << endl << endl;
+	IsolationEngine isolation;
+	isolation.Start();
+	return 0;
 }

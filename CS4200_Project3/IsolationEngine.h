@@ -1,7 +1,10 @@
 #pragma once
 
+#include <memory>
 #include "UserInterface.h"
 #include "GameEngine.h"
+#include "MiniMax.h"
+#include "Opponent.h"
 
 using namespace std;
 
@@ -17,8 +20,10 @@ public:
 
 private: 
 	UserInterface ui;
-	bool gameOver;
+	unique_ptr<MiniMax> computer;
+	unique_ptr<Opponent> opponent;
+	Player* currentPlayer;
+	bool computerTurn;
 	void GameLoop();
-	void ComputerTurn();
-	void AdversaryTurn();
+	void SwitchTurns(bool computerTurn);
 };
