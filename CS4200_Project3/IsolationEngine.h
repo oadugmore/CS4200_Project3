@@ -26,4 +26,6 @@ private:
 	bool computerTurn;
 	void GameLoop();
 	void SwitchTurns(bool computerTurn);
+	void FindPlayer(Node n, int& x, int& y);
+	Node Move(Node current, int currentX, int currentY, int newX, int newY);
 };

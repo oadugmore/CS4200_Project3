@@ -14,5 +14,6 @@ Opponent::~Opponent()
 
 Node Opponent::GetMove(Node currentState)
 {
-	
+	auto move = ui->GetMove();
+
 }

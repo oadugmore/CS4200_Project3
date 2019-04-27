@@ -54,7 +54,25 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 	vector<Node> successors;
 	array<array<char, 8>, 8> state = n.GetState();
 	int posX, posY;
-	findPlayer(n, posX, posY);
+	FindPlayer(n, posX, posY);
+
+	// check horizontal
+	for (int x = 0; x < 8; x++)
+	{
+		if (!isOccupied(n, x, posY))
+		{
+			successors.push_back(Move(n, posX, posY, x, posY));
+		}
+	}
+
+	// check vertical
+	for (int y = 0; y < 8; y++)
+	{
+		if (!isOccupied(n, posX, y))
+		{
+			successors.push_back(Move(n, posX, posY, posX, y));
+		}
+	}
 
 	// check top right
 	int checkX = posX + 1, checkY = posY + 1;
@@ -62,7 +80,7 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 	{
 		if (!isOccupied(n, checkX, checkY))
 		{
-			successors.push_back(move(n, posX, posY, checkX, checkY));
+			successors.push_back(Move(n, posX, posY, checkX, checkY));
 		}
 		checkX++;
 		checkY++;
@@ -74,7 +92,7 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 	{
 		if (!isOccupied(n, checkX, checkY))
 		{
-			successors.push_back(move(n, posX, posY, checkX, checkY));
+			successors.push_back(Move(n, posX, posY, checkX, checkY));
 		}
 		checkX++;
 		checkY--;
@@ -86,7 +104,7 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 	{
 		if (!isOccupied(n, checkX, checkY))
 		{
-			successors.push_back(move(n, posX, posY, checkX, checkY));
+			successors.push_back(Move(n, posX, posY, checkX, checkY));
 		}
 		checkX--;
 		checkY--;
@@ -98,7 +116,7 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 	{
 		if (!isOccupied(n, checkX, checkY))
 		{
-			successors.push_back(move(n, posX, posY, checkX, checkY));
+			successors.push_back(Move(n, posX, posY, checkX, checkY));
 		}
 		checkX--;
 		checkY++;
@@ -112,7 +130,7 @@ bool positionExists(int x, int y)
 	return (x < 8 && x > -1 && y < 8 && y > -1);
 }
 
-Node move(Node current, int currentX, int currentY, int newX, int newY)
+Node IsolationEngine::Move(Node current, int currentX, int currentY, int newX, int newY)
 {
 	char player = current.IsPlayerTurn() ? 'X' : 'O';
 	array<array<char, 8>, 8> newState = current.GetState();
@@ -121,7 +139,7 @@ Node move(Node current, int currentX, int currentY, int newX, int newY)
 	return Node(newState, !current.IsPlayerTurn(), { newX, newY });
 }
 
-void findPlayer(Node n, int& x, int& y)
+void IsolationEngine::FindPlayer(Node n, int& x, int& y)
 {
 	char player = n.IsPlayerTurn() ? 'X' : 'O';
 	array<array<char, 8>, 8> state = n.GetState();
@@ -148,7 +166,7 @@ bool isOccupied(Node n, int x, int y)
 
 int IsolationEngine::Utility(Node n)
 {
-	return 0;
+	
 }
 
 bool IsolationEngine::TerminalTest(Node n)
