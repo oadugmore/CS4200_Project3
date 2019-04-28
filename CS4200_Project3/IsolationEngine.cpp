@@ -166,7 +166,26 @@ bool isOccupied(Node n, int x, int y)
 
 int IsolationEngine::Utility(Node n)
 {
-	
+	int otherPlayersOptions = n.GetSuccessors(this).size();
+
+	// check if this player won
+	if (otherPlayersOptions == 0)
+	{
+		return INFINITY;
+	}
+
+	// This is a theoretical state where it is this player's move again.
+	// This allows us to estimate how many move options this player would have.
+	Node alternateMove = Node(n.GetState(), !n.IsPlayerTurn(), n.LastMove());
+	int thisPlayersOptions = alternateMove.GetSuccessors(this).size();
+
+	if (thisPlayersOptions == 0)
+	{
+		return -INFINITY;
+	}
+
+	// use heuristic
+
 }
 
 bool IsolationEngine::TerminalTest(Node n)
