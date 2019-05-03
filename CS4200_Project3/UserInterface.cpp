@@ -25,12 +25,12 @@ bool UserInterface::ComputerStarts()
     char input;
     for (;;)
     {
-		if (cin >> input && (input == 'C' || input == 'c' || input == 'O' || input == 'o'))
-		{
+        if (cin >> input && (input == 'C' || input == 'c' || input == 'O' || input == 'o'))
+        {
             bool computerStarts = (input == 'C' || input == 'c');
-			vsMessage = computerStarts ? "Computer vs. Opponent" : "Opponent vs. Computer";
-			return computerStarts;
-		}
+            vsMessage = computerStarts ? "Computer vs. Opponent" : "Opponent vs. Computer";
+            return computerStarts;
+        }
         else
         {
             cout << "Please enter either C or O." << endl;
@@ -46,8 +46,11 @@ array<int, 2> UserInterface::GetMove()
     string input;
     for (;;)
     {
-		if (cin >> input && ValidMove(input))
-			return { CharToInt(input[0]), input[1] };
+        if (cin >> input && ValidMove(input))
+        {
+            moves.push_back(input);
+            return { CharToInt(input[0]), input[1] };
+        }
         else
         {
             cout << "Please enter a move in the form A1, E6, etc." << endl;
@@ -69,26 +72,47 @@ bool UserInterface::ValidMove(string move)
 
 int UserInterface::CharToInt(char c)
 {
-	char letter = __ascii_tolower(c);
-	return (letter - 'a');
+    char letter = __ascii_tolower(c);
+    return (letter - 'a');
 }
 
 char UserInterface::IntToChar(int i)
 {
-	return ('A' + i);
+    return ('A' + i);
 }
-
 
 void UserInterface::DisplayBoard(Node board)
 {
-	cout << " 1 2 3 4 5 6 7 8\t" << vsMessage << endl;
+    cout << " 1 2 3 4 5 6 7 8\t" << vsMessage << endl;
 
-	auto computerMove = board.LastMove();
+    auto computerMove = board.LastMove();
+    moves.push_back("" + IntToChar(computerMove[0]) + computerMove[1]);
+    auto state = board.GetState();
+    //auto playerMove = board.PreviousState().LastMove();
 
-	int lines = 0;
-	while (lines < ROW_COUNT || )
-	{
+    int lines = 0;
+    while (lines < ROW_COUNT || lines * 2 < moves.size())
+    {
+        // print this row of the board
+        if (lines < ROW_COUNT)
+        {
+            cout << IntToChar(lines);
+            for (int i = 0; i < ROW_COUNT; i++)
+            {
+                cout << " " << state[i][lines];
+            }
+        }
 
-	}
-	
+        if (lines * 2 < moves.size())
+        {
+            cout << "\t" << moves[lines * 2];
+        }
+        if (lines * 2 + 1 < moves.size())
+        {
+            cout << "\t" << moves[lines * 2 + 1];
+        }
+
+        lines++;
+    }
+
 }

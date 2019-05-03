@@ -1,5 +1,6 @@
 #include "MiniMax.h"
 #include "RandomGeneration.h"
+#include <climits>
 
 
 struct TimesUpException : public exception { };
@@ -65,7 +66,8 @@ Node MiniMax::GetMove(Node currentState)
 // and returns the best move found.
 Node MiniMax::AlphaBetaSearch(Node currentState, int depth)
 {
-	vector<Node> successors = currentState.GetSuccessors(gameEngine);
+	//vector<Node> successors = currentState.GetSuccessors(gameEngine);
+    vector<Node> successors = gameEngine->GetSuccessors(currentState);
 
 	// terminal test:
 	// this is the current state of the board
@@ -96,8 +98,9 @@ Node MiniMax::AlphaBetaSearch(Node currentState, int depth)
 // then chooses randomly between the best available moves.
 Node MiniMax::AlphaBetaRandomBest(Node currentState, int depth)
 {
-	vector<Node> successors = currentState.GetSuccessors(gameEngine);
-	vector<Node> bestOptions;
+	//vector<Node> successors = currentState.GetSuccessors(gameEngine);
+    vector<Node> successors = gameEngine->GetSuccessors(currentState);
+    vector<Node> bestOptions;
 
 	// terminal test: shouldn't be necessary
 	// because this is called for the first move
@@ -138,7 +141,8 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, int depth)
 	if (TimesUp())
 		throw TimesUpException();
 
-	vector<Node> successors = currentState.GetSuccessors(gameEngine);
+	//vector<Node> successors = currentState.GetSuccessors(gameEngine);
+    vector<Node> successors = gameEngine->GetSuccessors(currentState);
 
 	// terminal test
     if (successors.empty() || depth == 0)
@@ -162,7 +166,8 @@ int MiniMax::MinValue(Node currentState, int alpha, int beta, int depth)
 	if (TimesUp())
 		throw TimesUpException();
 
-	vector<Node> successors = currentState.GetSuccessors(gameEngine);
+	//vector<Node> successors = currentState.GetSuccessors(gameEngine);
+    vector<Node> successors = gameEngine->GetSuccessors(currentState);
 
 	// terminal test
 	if (successors.empty() || depth == 0)

@@ -1,5 +1,7 @@
 #include "Node.h"
 
+using std::exception;
+
 Node::Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove)
 {
 	this->state = state;
@@ -19,22 +21,26 @@ Node::Node()
 	hasCalculatedSuccessors = false;
 }
 
-int Node::GetValue()
-{
-	//return value;
-	throw exception("Use IsolationEngine methods for this.");
-}
+//Node::Node(const Node& node)
+//{
+//}
+
+//int Node::GetValue()
+//{
+//	//return value;
+//	throw exception("Use IsolationEngine methods for this.");
+//}
 
 array<array<char, 8>, 8> Node::GetState()
 {
 	return state;
 }
 
-bool Node::IsTerminal()
-{
-	//return isTerminal;
-	throw exception("Use IsolationEngine methods for this.");
-}
+//bool Node::IsTerminal()
+//{
+//	//return isTerminal;
+//	throw exception("Use IsolationEngine methods for this.");
+//}
 
 bool Node::IsPlayerTurn()
 {
@@ -48,13 +54,22 @@ array<int, 2> Node::LastMove()
 
 // Uses the GameEngine method to get this node's successors,
 // and caches them for later
-vector<Node> Node::GetSuccessors(GameEngine* gameEngine)
+//vector<Node> Node::GetSuccessors(GameEngine* gameEngine)
+//{
+//	// if successors aren't already cached, generate them
+//	if (!hasCalculatedSuccessors)
+//	{
+//		hasCalculatedSuccessors = true;
+//	}
+//	return successors;
+//}
+
+bool Node::HasCalculatedSuccessors()
 {
-	// if successors aren't already cached, generate them
-	if (!hasCalculatedSuccessors)
-	{
-		successors = gameEngine->GetSuccessors(*this);
-		hasCalculatedSuccessors = true;
-	}
-	return successors;
+    return hasCalculatedSuccessors;
 }
+
+//Node Node::PreviousState()
+//{
+//    return *previousMove;
+//}

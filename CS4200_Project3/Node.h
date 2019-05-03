@@ -2,21 +2,26 @@
 
 #include <array>
 #include <vector>
-#include "GameEngine.h"
+#include <memory>
 
-using namespace std;
+using std::vector;
+using std::array;
+using std::shared_ptr;
 
 class Node
 {
 public:
     Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove);
 	Node();
-    int GetValue();
+    //Node(const Node& node);
+    //int GetValue();
     array<array<char, 8>, 8> GetState();
-    bool IsTerminal();
+    //bool IsTerminal();
 	bool IsPlayerTurn();
 	array<int, 2> LastMove();
-	vector<Node> GetSuccessors(GameEngine* gameEngine);
+	//vector<Node> GetSuccessors(GameEngine* gameEngine);
+    bool HasCalculatedSuccessors();
+    //Node PreviousState();
 
 private:
     array<array<char, 8>, 8> state;
@@ -24,6 +29,7 @@ private:
 	array<int, 2> lastMove;
 	vector<Node> successors;
 	bool hasCalculatedSuccessors;
+    shared_ptr<Node> previousMove;
     //int value;
     //bool isTerminal;
 
