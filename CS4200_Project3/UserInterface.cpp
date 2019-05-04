@@ -53,6 +53,7 @@ bool UserInterface::ComputerStarts()
 
 array<int, 2> UserInterface::GetMove()
 {
+    cout << endl;
     cout << "Enter opponent's move: ";
     string input;
     for (;;)
@@ -94,12 +95,16 @@ char UserInterface::IntToChar(int i)
 
 void UserInterface::DisplayBoard(Node board)
 {
-    cout << " 1 2 3 4 5 6 7 8\t" << vsMessage << endl;
+    cout << endl;
+    cout << "  1 2 3 4 5 6 7 8\t" << vsMessage << endl;
+    auto state = board.GetState();
 
     auto computerMove = board.LastMove();
-    moves.push_back("" + IntToChar(computerMove[0]) + (computerMove[1] + 1));
-    auto state = board.GetState();
-    //auto playerMove = board.PreviousState().LastMove();
+    // for the first move there is no "last move."
+    if (computerMove[0] != -1)
+    {
+        moves.push_back("" + IntToChar(computerMove[0]) + (computerMove[1] + 1));
+    }
 
     int lines = 0;
     while (lines < ROW_COUNT || lines * 2 < moves.size())
@@ -110,10 +115,11 @@ void UserInterface::DisplayBoard(Node board)
             cout << IntToChar(lines);
             for (int i = 0; i < ROW_COUNT; i++)
             {
-                cout << " " << state[i][lines];
+                cout << " " << state[lines][i];
             }
         }
 
+        // print move history
         if (lines * 2 < moves.size())
         {
             cout << "\t" << moves[lines * 2];
@@ -123,7 +129,14 @@ void UserInterface::DisplayBoard(Node board)
             cout << "\t" << moves[lines * 2 + 1];
         }
 
+        cout << endl;
         lines++;
+    }
+
+    if (computerMove[0] != -1)
+    {
+        cout << endl;
+        cout << "Computer's move is: " << moves[moves.size() - 1] << endl;
     }
 
 }

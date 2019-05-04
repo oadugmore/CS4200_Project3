@@ -17,19 +17,19 @@ public:
     //int GetValue();
     array<array<char, 8>, 8> GetState();
     //bool IsTerminal();
-	bool IsComputerTurn();
+	bool ComputerTurnNext();
 	array<int, 2> LastMove();
 	//vector<Node> GetSuccessors(GameEngine* gameEngine);
-    bool HasCalculatedSuccessors();
+    //bool HasCalculatedSuccessors();
     //Node PreviousState();
 
 private:
     array<array<char, 8>, 8> state;
 	bool isComputerTurn;
 	array<int, 2> lastMove;
-	vector<Node> successors;
-	bool hasCalculatedSuccessors;
-    shared_ptr<Node> previousMove;
+	//vector<Node> successors;
+	//bool hasCalculatedSuccessors;
+    //shared_ptr<Node> previousMove;
     //int value;
     //bool isTerminal;
 

@@ -7,7 +7,7 @@ Node::Node(array<array<char, 8>, 8> state, bool computerTurn, array<int, 2> last
 	this->state = state;
 	this->isComputerTurn = computerTurn;
 	this->lastMove = lastMove;
-	this->hasCalculatedSuccessors = false;
+	//this->hasCalculatedSuccessors = false;
 	//this->value = value;
 	//this->isTerminal = isTerminal;
 }
@@ -18,7 +18,7 @@ Node::Node()
 	state = {};
 	isComputerTurn = false;
 	lastMove = {};
-	hasCalculatedSuccessors = false;
+	//hasCalculatedSuccessors = false;
 }
 
 //Node::Node(const Node& node)
@@ -42,7 +42,7 @@ array<array<char, 8>, 8> Node::GetState()
 //	throw exception("Use IsolationEngine methods for this.");
 //}
 
-bool Node::IsComputerTurn()
+bool Node::ComputerTurnNext()
 {
 	return isComputerTurn;
 }
@@ -64,10 +64,10 @@ array<int, 2> Node::LastMove()
 //	return successors;
 //}
 
-bool Node::HasCalculatedSuccessors()
-{
-    return hasCalculatedSuccessors;
-}
+//bool Node::HasCalculatedSuccessors()
+//{
+//    return hasCalculatedSuccessors;
+//}
 
 //Node Node::PreviousState()
 //{

@@ -13,13 +13,13 @@ IsolationEngine::IsolationEngine()
 
 void IsolationEngine::Start()
 {
-	// initialize game engine
-	int timeout = ui.GetTimeLimit();
-	computer = make_unique<MiniMax>(this, timeout);
-	opponent = make_unique<Opponent>(&ui, this);
+    // initialize game engine
+    int timeout = ui.GetTimeLimit();
+    computer = make_unique<MiniMax>(this, timeout);
+    opponent = make_unique<Opponent>(&ui, this);
     bool computerStarts = ui.ComputerStarts();
     SwitchTurns(!computerStarts);
-	GameLoop(GetInitialBoard(computerStarts));
+    GameLoop(GetInitialBoard(computerStarts));
 }
 
 Node IsolationEngine::GetInitialBoard(bool computerStarts)
@@ -37,176 +37,181 @@ Node IsolationEngine::GetInitialBoard(bool computerStarts)
     char otherChar = computerStarts ? 'O' : 'X';
     state[0][0] = startChar;
     state[7][7] = otherChar;
-    return Node(state, !computerStarts, {});
+    return Node(state, computerStarts, { -1 });
 }
 
 void IsolationEngine::GameLoop(Node initialState)
 {
-	Node currentState = initialState;
+    Node currentState = initialState;
 
-	while (true)
-	{
-		currentState = currentPlayer->GetMove(currentState);
-        //if (currentState.)
-		ui.DisplayBoard(currentState);
-		SwitchTurns(!currentState.IsComputerTurn());
-	}
+    while (true)
+    {
+        currentState = currentPlayer->GetMove(currentState);
+
+        // only display UI after computer moves
+        if (!currentState.ComputerTurnNext())
+        {
+            ui.DisplayBoard(currentState);
+        }
+
+        SwitchTurns(!currentState.ComputerTurnNext());
+    }
 }
 
 void IsolationEngine::SwitchTurns(bool opponentTurnNext)
 {
-	if (opponentTurnNext)
-	{
-		currentPlayer = &*opponent;
-		//computerTurn = true;
-	}
-	else
-	{
-		currentPlayer = &*computer;
-		//computerTurn = false;
-	}
+    if (opponentTurnNext)
+    {
+        currentPlayer = &*opponent;
+        //computerTurn = true;
+    }
+    else
+    {
+        currentPlayer = &*computer;
+        //computerTurn = false;
+    }
 }
 
 vector<Node> IsolationEngine::GetSuccessors(Node n)
 {
-	vector<Node> successors;
-	array<array<char, 8>, 8> state = n.GetState();
-	int posX, posY;
-	FindActivePlayer(n, posX, posY);
+    vector<Node> successors;
+    array<array<char, 8>, 8> state = n.GetState();
+    int posX, posY;
+    FindActivePlayer(n, posX, posY);
 
-	// check horizontal
-	for (int x = 0; x < 8; x++)
-	{
-		if (!IsOccupied(n, x, posY))
-		{
-			successors.push_back(Move(n, posX, posY, x, posY));
-		}
-	}
+    // check horizontal
+    for (int x = 0; x < 8; x++)
+    {
+        if (!IsOccupied(n, x, posY))
+        {
+            successors.push_back(Move(n, posX, posY, x, posY));
+        }
+    }
 
-	// check vertical
-	for (int y = 0; y < 8; y++)
-	{
-		if (!IsOccupied(n, posX, y))
-		{
-			successors.push_back(Move(n, posX, posY, posX, y));
-		}
-	}
+    // check vertical
+    for (int y = 0; y < 8; y++)
+    {
+        if (!IsOccupied(n, posX, y))
+        {
+            successors.push_back(Move(n, posX, posY, posX, y));
+        }
+    }
 
-	// check top right
+    // check top right
     int checkX = posX + 1;
     int checkY = posY + 1;
-	while (PositionExists(checkX, checkY))
-	{
-		if (!IsOccupied(n, checkX, checkY))
-		{
-			successors.push_back(Move(n, posX, posY, checkX, checkY));
-		}
-		checkX++;
-		checkY++;
-	}
+    while (PositionExists(checkX, checkY))
+    {
+        if (!IsOccupied(n, checkX, checkY))
+        {
+            successors.push_back(Move(n, posX, posY, checkX, checkY));
+        }
+        checkX++;
+        checkY++;
+    }
 
-	// check bottom right
+    // check bottom right
     checkX = posX + 1;
     checkY = posY - 1;
-	while (PositionExists(checkX, checkY))
-	{
-		if (!IsOccupied(n, checkX, checkY))
-		{
-			successors.push_back(Move(n, posX, posY, checkX, checkY));
-		}
-		checkX++;
-		checkY--;
-	}
+    while (PositionExists(checkX, checkY))
+    {
+        if (!IsOccupied(n, checkX, checkY))
+        {
+            successors.push_back(Move(n, posX, posY, checkX, checkY));
+        }
+        checkX++;
+        checkY--;
+    }
 
-	// check bottom left
+    // check bottom left
     checkX = posX - 1;
     checkY = posY - 1;
-	while (PositionExists(checkX, checkY))
-	{
-		if (!IsOccupied(n, checkX, checkY))
-		{
-			successors.push_back(Move(n, posX, posY, checkX, checkY));
-		}
-		checkX--;
-		checkY--;
-	}
+    while (PositionExists(checkX, checkY))
+    {
+        if (!IsOccupied(n, checkX, checkY))
+        {
+            successors.push_back(Move(n, posX, posY, checkX, checkY));
+        }
+        checkX--;
+        checkY--;
+    }
 
-	// check top left
+    // check top left
     checkX = posX - 1;
     checkY = posY + 1;
-	while (PositionExists(checkX, checkY))
-	{
-		if (!IsOccupied(n, checkX, checkY))
-		{
-			successors.push_back(Move(n, posX, posY, checkX, checkY));
-		}
-		checkX--;
-		checkY++;
-	}
+    while (PositionExists(checkX, checkY))
+    {
+        if (!IsOccupied(n, checkX, checkY))
+        {
+            successors.push_back(Move(n, posX, posY, checkX, checkY));
+        }
+        checkX--;
+        checkY++;
+    }
 
-	return successors;
+    return successors;
 }
 
 bool IsolationEngine::PositionExists(int x, int y)
 {
-	return (x < 8 && x > -1 && y < 8 && y > -1);
+    return (x < 8 && x > -1 && y < 8 && y > -1);
 }
 
 Node IsolationEngine::Move(Node current, int currentX, int currentY, int newX, int newY)
 {
-	char player = current.IsComputerTurn() ? 'X' : 'O';
-	array<array<char, 8>, 8> newState = current.GetState();
-	newState[currentX][currentY] = '#';
-	newState[newX][newY] = player;
-	return Node(newState, !current.IsComputerTurn(), { newX, newY });
+    char player = current.ComputerTurnNext() ? 'X' : 'O';
+    array<array<char, 8>, 8> newState = current.GetState();
+    newState[currentX][currentY] = '#';
+    newState[newX][newY] = player;
+    return Node(newState, !current.ComputerTurnNext(), { newX, newY });
 }
 
 void IsolationEngine::FindActivePlayer(Node n, int& x, int& y)
 {
-	char player = n.IsComputerTurn() ? 'X' : 'O';
-	array<array<char, 8>, 8> state = n.GetState();
-	//int posX, posY;
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			if (state[i][j] == player)
-			{
-				x = i;
-				y = j;
-				return;
-			}
-		}
-	}
+    char player = n.ComputerTurnNext() ? 'X' : 'O';
+    array<array<char, 8>, 8> state = n.GetState();
+    //int posX, posY;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            if (state[i][j] == player)
+            {
+                x = i;
+                y = j;
+                return;
+            }
+        }
+    }
 }
 
 bool IsolationEngine::IsOccupied(Node n, int x, int y)
 {
-	char value = n.GetState()[x][y];
-	return (value == '#' || value == 'X' || value == 'O');
+    char value = n.GetState()[x][y];
+    return (value == '#' || value == 'X' || value == 'O');
 }
 
 int IsolationEngine::Utility(Node n)
 {
-	int otherPlayersOptions = GetSuccessors(n).size();
+    int otherPlayersOptions = GetSuccessors(n).size();
 
-	// check if this player won
-	if (otherPlayersOptions == 0)
-	{
-		return numeric_limits<int>::max();
-	}
+    // check if this player won
+    if (otherPlayersOptions == 0)
+    {
+        return numeric_limits<int>::max();
+    }
 
-	// This is a theoretical state where it is this player's move again.
-	// This allows us to estimate how many move options this player would have.
-	Node alternateMove = Node(n.GetState(), !n.IsComputerTurn(), n.LastMove());
-	int thisPlayersOptions = GetSuccessors(alternateMove).size();
+    // This is a theoretical state where it is this player's move again.
+    // This allows us to estimate how many move options this player would have.
+    Node alternateMove = Node(n.GetState(), !n.ComputerTurnNext(), n.LastMove());
+    int thisPlayersOptions = GetSuccessors(alternateMove).size();
 
-	if (thisPlayersOptions == 0)
-	{
-		return numeric_limits<int>::min();
-	}
+    if (thisPlayersOptions == 0)
+    {
+        return numeric_limits<int>::min();
+    }
 
-	// use heuristic
+    // use heuristic
 
 }
 
