@@ -4,9 +4,10 @@
 #include <vector>
 #include <string>
 #include <array>
-#include <iostream>
 
-using namespace std;
+using std::vector;
+using std::string;
+using std::array;
 
 class UserInterface
 {
@@ -30,7 +31,7 @@ public:
 
 private:
     bool ValidMove(string move);
-	int CharToInt(char c);
+	int CharToInt(unsigned char c);
 	char IntToChar(int i);
 	string vsMessage;
 	vector<string> moves;

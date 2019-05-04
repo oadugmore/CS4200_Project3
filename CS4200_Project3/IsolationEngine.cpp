@@ -1,14 +1,14 @@
 #include "IsolationEngine.h"
+#include <limits>
+#include <array>
 
-
+const int ROW_COUNT = 8;
+using std::array;
+using std::numeric_limits;
 
 IsolationEngine::IsolationEngine()
 {
-}
-
-
-IsolationEngine::~IsolationEngine()
-{
+    currentPlayer = &*computer;
 }
 
 void IsolationEngine::Start()
@@ -17,27 +17,45 @@ void IsolationEngine::Start()
 	int timeout = ui.GetTimeLimit();
 	computer = make_unique<MiniMax>(this, timeout);
 	opponent = make_unique<Opponent>(&ui, this);
-
-	GameLoop();
+    bool computerStarts = ui.ComputerStarts();
+    SwitchTurns(!computerStarts);
+	GameLoop(GetInitialBoard(computerStarts));
 }
 
-void IsolationEngine::GameLoop()
+Node IsolationEngine::GetInitialBoard(bool computerStarts)
 {
-	Node currentState;
-	SwitchTurns(ui.ComputerStarts());
+    array<array<char, 8>, 8> state;
+    for (int i = 0; i < ROW_COUNT; i++)
+    {
+        for (int j = 0; j < ROW_COUNT; j++)
+        {
+            state[i][j] = '-';
+        }
+    }
+
+    char startChar = computerStarts ? 'X' : 'O';
+    char otherChar = computerStarts ? 'O' : 'X';
+    state[0][0] = startChar;
+    state[7][7] = otherChar;
+    return Node(state, !computerStarts, {});
+}
+
+void IsolationEngine::GameLoop(Node initialState)
+{
+	Node currentState = initialState;
 
 	while (true)
 	{
 		currentState = currentPlayer->GetMove(currentState);
         //if (currentState.)
 		ui.DisplayBoard(currentState);
-		SwitchTurns(!currentState.IsPlayerTurn());
+		SwitchTurns(!currentState.IsComputerTurn());
 	}
 }
 
-void IsolationEngine::SwitchTurns(bool playerTurnNext)
+void IsolationEngine::SwitchTurns(bool opponentTurnNext)
 {
-	if (playerTurnNext)
+	if (opponentTurnNext)
 	{
 		currentPlayer = &*opponent;
 		//computerTurn = true;
@@ -136,16 +154,16 @@ bool IsolationEngine::PositionExists(int x, int y)
 
 Node IsolationEngine::Move(Node current, int currentX, int currentY, int newX, int newY)
 {
-	char player = current.IsPlayerTurn() ? 'X' : 'O';
+	char player = current.IsComputerTurn() ? 'X' : 'O';
 	array<array<char, 8>, 8> newState = current.GetState();
 	newState[currentX][currentY] = '#';
 	newState[newX][newY] = player;
-	return Node(newState, !current.IsPlayerTurn(), { newX, newY });
+	return Node(newState, !current.IsComputerTurn(), { newX, newY });
 }
 
 void IsolationEngine::FindActivePlayer(Node n, int& x, int& y)
 {
-	char player = n.IsPlayerTurn() ? 'X' : 'O';
+	char player = n.IsComputerTurn() ? 'X' : 'O';
 	array<array<char, 8>, 8> state = n.GetState();
 	//int posX, posY;
 	for (int i = 0; i < 8; i++)
@@ -175,17 +193,17 @@ int IsolationEngine::Utility(Node n)
 	// check if this player won
 	if (otherPlayersOptions == 0)
 	{
-		return INFINITY;
+		return numeric_limits<int>::max();
 	}
 
 	// This is a theoretical state where it is this player's move again.
 	// This allows us to estimate how many move options this player would have.
-	Node alternateMove = Node(n.GetState(), !n.IsPlayerTurn(), n.LastMove());
+	Node alternateMove = Node(n.GetState(), !n.IsComputerTurn(), n.LastMove());
 	int thisPlayersOptions = GetSuccessors(alternateMove).size();
 
 	if (thisPlayersOptions == 0)
 	{
-		return -INFINITY;
+		return numeric_limits<int>::min();
 	}
 
 	// use heuristic

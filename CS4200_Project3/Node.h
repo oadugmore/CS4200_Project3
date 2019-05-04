@@ -11,13 +11,13 @@ using std::shared_ptr;
 class Node
 {
 public:
-    Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove);
+    Node(array<array<char, 8>, 8> state, bool computerTurn, array<int, 2> lastMove);
 	Node();
     //Node(const Node& node);
     //int GetValue();
     array<array<char, 8>, 8> GetState();
     //bool IsTerminal();
-	bool IsPlayerTurn();
+	bool IsComputerTurn();
 	array<int, 2> LastMove();
 	//vector<Node> GetSuccessors(GameEngine* gameEngine);
     bool HasCalculatedSuccessors();
@@ -25,7 +25,7 @@ public:
 
 private:
     array<array<char, 8>, 8> state;
-	bool isPlayerTurn;
+	bool isComputerTurn;
 	array<int, 2> lastMove;
 	vector<Node> successors;
 	bool hasCalculatedSuccessors;

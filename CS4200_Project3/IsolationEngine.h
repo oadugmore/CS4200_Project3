@@ -1,24 +1,23 @@
 #pragma once
-
-#include <memory>
-#include <vector>
-#include "UserInterface.h"
 #include "GameEngine.h"
+#include "UserInterface.h"
 #include "MiniMax.h"
 #include "Opponent.h"
+#include <memory>
+#include <vector>
 
 using std::unique_ptr;
+using std::make_unique;
 using std::vector;
 
 class IsolationEngine : public GameEngine
 {
 public:
 	IsolationEngine();
-	~IsolationEngine();
 	void Start();
+    Node GetInitialBoard(bool computerStarts);
     vector<Node> GetSuccessors(Node n) override;
     int Utility(Node n) override;
-    //bool TerminalTest(Node n);
 	void FindActivePlayer(Node n, int& x, int& y) override;
 	Node Move(Node current, int currentX, int currentY, int newX, int newY) override;
 
@@ -29,7 +28,6 @@ private:
 	Player* currentPlayer;
     bool IsOccupied(Node n, int x, int y);
     bool PositionExists(int x, int y);
-	//bool computerTurn;
-	void GameLoop();
+    void GameLoop(Node initialState);
 	void SwitchTurns(bool computerTurn);
 };

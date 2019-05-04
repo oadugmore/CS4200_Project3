@@ -1,6 +1,6 @@
 #include "MiniMax.h"
 #include "RandomGeneration.h"
-#include <climits>
+#include <limits>
 
 
 struct TimesUpException : public exception { };
@@ -15,7 +15,7 @@ MiniMax::MiniMax(GameEngine* gameEngine, int timeout)
 // Check if current search has taken more than the set timeout
 bool MiniMax::TimesUp()
 {
-	auto currentTime = chrono::high_resolution_clock::now();
+	auto currentTime = high_resolution_clock::now();
 	auto elapsed = currentTime - startTime;
 	float seconds = elapsed.count() / 1000000000;
 	return (seconds > 19);
@@ -26,7 +26,7 @@ Node MiniMax::GetMove(Node currentState)
 	// initialize hash table
 
 	int depth = 1;
-	startTime = chrono::high_resolution_clock::now();
+	startTime = high_resolution_clock::now();
 	Node bestMove;
 
 	// "if there are multiple optimal moves that result in the same evaluation value,
@@ -77,9 +77,9 @@ Node MiniMax::AlphaBetaSearch(Node currentState, int depth)
 		return currentState;
 	}
 
-	int v = INT_MIN;
-	int alpha = INT_MIN;
-	int beta = INT_MAX;
+	int v = numeric_limits<int>::min();
+	int alpha = v;
+	constexpr int beta = numeric_limits<int>::max();
 	for (int i = 0; i < successors.size(); i++)
 	{
 		int min = MinValue(successors[i], alpha, beta, depth - 1);
@@ -109,9 +109,9 @@ Node MiniMax::AlphaBetaRandomBest(Node currentState, int depth)
 		return currentState;
 	}
 
-	int v = INT_MIN;
-	int alpha = INT_MIN;
-	int beta = INT_MAX;
+	int v = numeric_limits<int>::min();
+	int alpha = v;
+    constexpr int beta = numeric_limits<int>::max();
 	for (int i = 0; i < successors.size(); i++)
 	{
 		int min = MinValue(successors[i], alpha, beta, depth - 1);
@@ -148,7 +148,7 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, int depth)
     if (successors.empty() || depth == 0)
         return gameEngine->Utility(currentState);
 
-    int v = INT_MIN;
+    int v = numeric_limits<int>::min();
     for (int i = 0; i < successors.size(); i++)
     {
         int min = MinValue(successors[i], alpha, beta, depth - 1);
@@ -173,7 +173,7 @@ int MiniMax::MinValue(Node currentState, int alpha, int beta, int depth)
 	if (successors.empty() || depth == 0)
         return gameEngine->Utility(currentState);
 
-    int v = INT_MIN;
+    int v = numeric_limits<int>::min();
     for (int i = 0; i < successors.size(); i++)
     {
         v = Min(v, MaxValue(successors[i], alpha, beta, depth - 1));

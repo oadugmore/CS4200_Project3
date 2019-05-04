@@ -7,7 +7,8 @@
 #include <chrono>
 
 using std::unordered_map;
-namespace chrn = std::chrono;
+using std::chrono::high_resolution_clock;
+using std::chrono::time_point;
 
 class MiniMax : public Player
 {
@@ -20,7 +21,7 @@ private:
     GameEngine* gameEngine;
 	bool firstMove;
 	int timeout;
-    chrn::time_point<chrn::steady_clock> startTime;
+    time_point<high_resolution_clock> startTime;
 	Node AlphaBetaSearch(Node currentState, int depth);
 	Node AlphaBetaRandomBest(Node currentState, int depth);
 	int MaxValue(Node currentState, int alpha, int beta, int depth);

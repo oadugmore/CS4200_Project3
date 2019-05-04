@@ -2,10 +2,10 @@
 
 using std::exception;
 
-Node::Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMove)
+Node::Node(array<array<char, 8>, 8> state, bool computerTurn, array<int, 2> lastMove)
 {
 	this->state = state;
-	this->isPlayerTurn = playerTurn;
+	this->isComputerTurn = computerTurn;
 	this->lastMove = lastMove;
 	this->hasCalculatedSuccessors = false;
 	//this->value = value;
@@ -16,7 +16,7 @@ Node::Node(array<array<char, 8>, 8> state, bool playerTurn, array<int, 2> lastMo
 Node::Node()
 {
 	state = {};
-	isPlayerTurn = false;
+	isComputerTurn = false;
 	lastMove = {};
 	hasCalculatedSuccessors = false;
 }
@@ -42,9 +42,9 @@ array<array<char, 8>, 8> Node::GetState()
 //	throw exception("Use IsolationEngine methods for this.");
 //}
 
-bool Node::IsPlayerTurn()
+bool Node::IsComputerTurn()
 {
-	return isPlayerTurn;
+	return isComputerTurn;
 }
 
 array<int, 2> Node::LastMove()

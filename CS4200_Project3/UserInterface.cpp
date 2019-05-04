@@ -1,6 +1,17 @@
 #include "UserInterface.h"
+#include <iostream>
+#include <limits>
+#include <cctype>
+
 
 const int ROW_COUNT = 8;
+using std::numeric_limits;
+using std::streamsize;
+using std::tolower;
+using std::toupper;
+using std::cin;
+using std::cout;
+using std::endl;
 
 int UserInterface::GetTimeLimit()
 {
@@ -48,8 +59,8 @@ array<int, 2> UserInterface::GetMove()
     {
         if (cin >> input && ValidMove(input))
         {
-            moves.push_back(input);
-            return { CharToInt(input[0]), input[1] };
+            moves.push_back("" + toupper(static_cast<unsigned char>(input[0])) + input[1]);
+            return { CharToInt(input[0]), input[1] - '1' };
         }
         else
         {
@@ -63,16 +74,16 @@ array<int, 2> UserInterface::GetMove()
 bool UserInterface::ValidMove(string move)
 {
     if (move.size() != 2) return false;
-    char letter = __ascii_tolower(move[0]);
-    int number = move[1];
+    char letter = tolower(static_cast<unsigned char>(move[0]));
+    int number = move[1] - '0';
     if (letter < 'a' || letter > 'h') return false;
     if (number < 1 || number > 8) return false;
     return true;
 }
 
-int UserInterface::CharToInt(char c)
+int UserInterface::CharToInt(unsigned char c)
 {
-    char letter = __ascii_tolower(c);
+    auto letter = tolower(c);
     return (letter - 'a');
 }
 
@@ -86,7 +97,7 @@ void UserInterface::DisplayBoard(Node board)
     cout << " 1 2 3 4 5 6 7 8\t" << vsMessage << endl;
 
     auto computerMove = board.LastMove();
-    moves.push_back("" + IntToChar(computerMove[0]) + computerMove[1]);
+    moves.push_back("" + IntToChar(computerMove[0]) + (computerMove[1] + 1));
     auto state = board.GetState();
     //auto playerMove = board.PreviousState().LastMove();
 
