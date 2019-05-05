@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -154,6 +154,7 @@
     <ClCompile Include="CS4200_Project3.cpp" />
     <ClCompile Include="IsolationEngine.cpp" />
     <ClCompile Include="MiniMax.cpp" />
+    <ClCompile Include="MiniMaxTest.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="Opponent.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="IsolationEngine.h" />
     <ClInclude Include="MiniMax.h" />
+    <ClInclude Include="MiniMaxTest.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="Opponent.h" />
     <ClInclude Include="Player.h" />

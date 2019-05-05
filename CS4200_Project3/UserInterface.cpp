@@ -103,13 +103,13 @@ void UserInterface::InvalidMove()
     cout << endl << "That move is not valid." << endl;
 }
 
-void UserInterface::DisplayBoard(Node board)
+void UserInterface::DisplayBoard(shared_ptr<Node> board)
 {
     cout << endl;
     cout << "  1 2 3 4 5 6 7 8\t" << vsMessage << endl;
-    auto state = board.GetState();
+    auto state = board->GetState();
 
-    auto computerMove = board.LastMove();
+    auto computerMove = board->LastMove();
     // for the first move there is no "last move."
     if (computerMove[0] != -1)
     {

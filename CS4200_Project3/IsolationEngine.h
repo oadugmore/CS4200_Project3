@@ -15,20 +15,20 @@ class IsolationEngine : public GameEngine
 public:
 	IsolationEngine();
 	void Start();
-    Node GetInitialBoard(bool computerStarts);
-    vector<Node> GetSuccessors(Node n) override;
-    int Utility(Node n) override;
-	void FindActivePlayer(Node n, int& x, int& y) override;
-	Node Move(Node current, int currentX, int currentY, int newX, int newY) override;
-    bool TerminalTest(Node state);
+    shared_ptr<Node> GetInitialBoard(bool computerStarts);
+    vector<shared_ptr<Node>> GetSuccessors(shared_ptr<Node> n) override;
+    int Utility(shared_ptr<Node> n) override;
+	void FindActivePlayer(shared_ptr<Node> n, int& x, int& y) override;
+    shared_ptr<Node> Move(shared_ptr<Node> current, int currentX, int currentY, int newX, int newY) override;
+    bool TerminalTest(shared_ptr<Node> state);
 
 private: 
 	UserInterface ui;
 	unique_ptr<MiniMax> computer;
 	unique_ptr<Opponent> opponent;
 	Player* currentPlayer;
-    bool IsOccupied(Node n, int x, int y);
+    bool IsOccupied(shared_ptr<Node> n, int x, int y);
     bool PositionExists(int x, int y);
-    void GameLoop(Node initialState);
+    void GameLoop(shared_ptr<Node> initialState);
 	void SwitchTurns(bool computerTurn);
 };

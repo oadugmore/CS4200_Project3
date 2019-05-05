@@ -15,15 +15,15 @@ Opponent::~Opponent()
 {
 }
 
-Node Opponent::GetMove(Node currentState)
+shared_ptr<Node> Opponent::GetMove(shared_ptr<Node> currentState)
 {
-    vector<Node> possibleMoves = engine->GetSuccessors(currentState);
+    vector<shared_ptr<Node>> possibleMoves = engine->GetSuccessors(currentState);
     for (;;)
     {
 	    auto move = ui->GetMove();
         for (int i = 0; i < possibleMoves.size(); i++)
         {
-            if (possibleMoves[i].LastMove() == move)
+            if (possibleMoves[i]->LastMove() == move)
             {
                 int x, y;
                 engine->FindActivePlayer(currentState, x, y);

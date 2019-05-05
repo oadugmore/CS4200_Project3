@@ -5,5 +5,5 @@
 class Player
 {
 public:
-	virtual Node GetMove(Node currentState) = 0;
+	virtual shared_ptr<Node> GetMove(shared_ptr<Node> currentState) = 0;
 };

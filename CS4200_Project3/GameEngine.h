@@ -8,9 +8,8 @@ using std::vector;
 class GameEngine
 {
 public:
-    virtual vector<Node> GetSuccessors(Node n) = 0;
-    virtual int Utility(Node n) = 0;
-    //virtual bool TerminalTest(Node n) = 0;
-    virtual void FindActivePlayer(Node n, int& x, int& y) = 0;
-    virtual Node Move(Node current, int currentX, int currentY, int newX, int newY) = 0;
+    virtual vector<shared_ptr<Node>> GetSuccessors(shared_ptr<Node> n) = 0;
+    virtual int Utility(shared_ptr<Node> n) = 0;
+    virtual void FindActivePlayer(shared_ptr<Node> n, int& x, int& y) = 0;
+    virtual shared_ptr<Node> Move(shared_ptr<Node> current, int currentX, int currentY, int newX, int newY) = 0;
 };

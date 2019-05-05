@@ -25,7 +25,7 @@ public:
     void InvalidMove();
 
     // Updates the board display with the new state.
-	void DisplayBoard(Node board);
+	void DisplayBoard(shared_ptr<Node> board);
 
     void PrintResults(char winner);
 

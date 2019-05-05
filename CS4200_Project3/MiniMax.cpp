@@ -22,14 +22,14 @@ bool MiniMax::TimesUp()
     return (seconds > timeout - 1);
 }
 
-Node MiniMax::GetMove(Node currentState)
+shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
 {
     // initialize hash table
     hashTable.clear();
 
     int depth = 1;
     startTime = high_resolution_clock::now();
-    Node bestMove;
+    shared_ptr<Node> bestMove(nullptr);
 
     // "if there are multiple optimal moves that result in the same evaluation value,
     // it must randomly choose from those moves"
@@ -70,10 +70,10 @@ Node MiniMax::GetMove(Node currentState)
 
 // Performs MiniMax search with AlphaBeta pruning,
 // and returns the best move found.
-Node MiniMax::AlphaBetaSearch(Node currentState, int depth)
+shared_ptr<Node> MiniMax::AlphaBetaSearch(shared_ptr<Node> currentState, int depth)
 {
     //vector<Node> successors = currentState.GetSuccessors(gameEngine);
-    vector<Node> successors = gameEngine->GetSuccessors(currentState);
+    vector<shared_ptr<Node>> successors = gameEngine->GetSuccessors(currentState);
 
     // terminal test:
     // this is the current state of the board
@@ -96,17 +96,17 @@ Node MiniMax::AlphaBetaSearch(Node currentState, int depth)
         alpha = Max(alpha, v);
         hashTable[min] = successors[i];
     }
-
+    cout << "Current value: " << v << endl;
     return hashTable[v];
 }
 
 // Performs MiniMax search with AlphaBeta pruning,
 // then chooses randomly between the best available moves.
-Node MiniMax::AlphaBetaRandomBest(Node currentState, int depth)
+shared_ptr<Node> MiniMax::AlphaBetaRandomBest(shared_ptr<Node> currentState, int depth)
 {
     //vector<Node> successors = currentState.GetSuccessors(gameEngine);
-    vector<Node> successors = gameEngine->GetSuccessors(currentState);
-    vector<Node> bestOptions;
+    vector<shared_ptr<Node>> successors = gameEngine->GetSuccessors(currentState);
+    vector<shared_ptr<Node>> bestOptions;
 
     // terminal test: shouldn't be necessary
     // because this is called for the first move
@@ -142,13 +142,13 @@ Node MiniMax::AlphaBetaRandomBest(Node currentState, int depth)
     return bestOptions[choice];
 }
 
-int MiniMax::MaxValue(Node currentState, int alpha, int beta, int depth)
+int MiniMax::MaxValue(shared_ptr<Node> currentState, int alpha, int beta, int depth)
 {
     if (TimesUp())
         throw TimesUpException();
 
     //vector<Node> successors = currentState.GetSuccessors(gameEngine);
-    vector<Node> successors = gameEngine->GetSuccessors(currentState);
+    vector<shared_ptr<Node>> successors = gameEngine->GetSuccessors(currentState);
 
     // terminal test
     if (successors.empty() || depth == 0)
@@ -167,13 +167,13 @@ int MiniMax::MaxValue(Node currentState, int alpha, int beta, int depth)
     return v;
 }
 
-int MiniMax::MinValue(Node currentState, int alpha, int beta, int depth)
+int MiniMax::MinValue(shared_ptr<Node> currentState, int alpha, int beta, int depth)
 {
     if (TimesUp())
         throw TimesUpException();
 
     //vector<Node> successors = currentState.GetSuccessors(gameEngine);
-    vector<Node> successors = gameEngine->GetSuccessors(currentState);
+    vector<shared_ptr<Node>> successors = gameEngine->GetSuccessors(currentState);
 
     // terminal test
     if (successors.empty() || depth == 0)

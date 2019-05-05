@@ -6,6 +6,7 @@
 const int ROW_COUNT = 8;
 using std::array;
 using std::numeric_limits;
+using std::make_shared;
 
 IsolationEngine::IsolationEngine()
 {
@@ -23,7 +24,7 @@ void IsolationEngine::Start()
     GameLoop(GetInitialBoard(computerStarts));
 }
 
-Node IsolationEngine::GetInitialBoard(bool computerStarts)
+shared_ptr<Node> IsolationEngine::GetInitialBoard(bool computerStarts)
 {
     array<array<char, 8>, 8> state;
     for (int i = 0; i < ROW_COUNT; i++)
@@ -38,19 +39,20 @@ Node IsolationEngine::GetInitialBoard(bool computerStarts)
     char otherChar = computerStarts ? 'O' : 'X';
     state[0][0] = startChar;
     state[7][7] = otherChar;
-    return Node(state, computerStarts, { -1 });
+    array<int, 2> lastMove = { -1 };
+    return make_shared<Node>(state, computerStarts, lastMove);
 }
 
-void IsolationEngine::GameLoop(Node initialState)
+void IsolationEngine::GameLoop(shared_ptr<Node> initialState)
 {
-    Node currentState = initialState;
+    shared_ptr<Node> currentState = initialState;
 
     while (true)
     {
         currentState = currentPlayer->GetMove(currentState);
 
         // only display UI after computer moves
-        if (!currentState.ComputerTurnNext())
+        if (!currentState->ComputerTurnNext())
         {
             ui.DisplayBoard(currentState);
         }
@@ -62,7 +64,7 @@ void IsolationEngine::GameLoop(Node initialState)
             break;
         }
 
-        SwitchTurns(!currentState.ComputerTurnNext());
+        SwitchTurns(!currentState->ComputerTurnNext());
     }
 }
 
@@ -80,10 +82,10 @@ void IsolationEngine::SwitchTurns(bool opponentTurnNext)
     }
 }
 
-vector<Node> IsolationEngine::GetSuccessors(Node n)
+vector<shared_ptr<Node>> IsolationEngine::GetSuccessors(shared_ptr<Node> n)
 {
-    vector<Node> successors;
-    array<array<char, 8>, 8> state = n.GetState();
+    vector<shared_ptr<Node>> successors;
+    array<array<char, 8>, 8> state = n->GetState();
     int playerRow, playerColumn;
     FindActivePlayer(n, playerRow, playerColumn);
 
@@ -219,24 +221,26 @@ bool IsolationEngine::PositionExists(int x, int y)
     return (x < 8 && x > -1 && y < 8 && y > -1);
 }
 
-Node IsolationEngine::Move(Node current, int currentRow, int currentColumn, int newRow, int newColumn)
+shared_ptr<Node> IsolationEngine::Move(shared_ptr<Node> current, int currentRow, int currentColumn, int newRow, int newColumn)
 {
-    char player = current.ComputerTurnNext() ? 'X' : 'O';
-    array<array<char, 8>, 8> newState = current.GetState();
+    char player = current->ComputerTurnNext() ? 'X' : 'O';
+    array<array<char, 8>, 8> newState = current->GetState();
     newState[currentRow][currentColumn] = '#';
     newState[newRow][newColumn] = player;
-    return Node(newState, !current.ComputerTurnNext(), { newRow, newColumn });
+    array<int, 2> lastMove = { newRow, newColumn };
+    return make_shared<Node>(newState, !current->ComputerTurnNext(), lastMove);
+    //auto node2 = make_shared<Node>(newState, !current->ComputerTurnNext(), { newRow, newColumn });
 }
 
-bool IsolationEngine::TerminalTest(Node state)
+bool IsolationEngine::TerminalTest(shared_ptr<Node> state)
 {
     return GetSuccessors(state).size() == 0;
 }
 
-void IsolationEngine::FindActivePlayer(Node n, int& row, int& column)
+void IsolationEngine::FindActivePlayer(shared_ptr<Node> n, int& row, int& column)
 {
-    char player = n.ComputerTurnNext() ? 'X' : 'O';
-    array<array<char, 8>, 8> state = n.GetState();
+    char player = n->ComputerTurnNext() ? 'X' : 'O';
+    array<array<char, 8>, 8> state = n->GetState();
     //int posX, posY;
     for (int i = 0; i < 8; i++)
     {
@@ -252,13 +256,13 @@ void IsolationEngine::FindActivePlayer(Node n, int& row, int& column)
     }
 }
 
-bool IsolationEngine::IsOccupied(Node n, int row, int column)
+bool IsolationEngine::IsOccupied(shared_ptr<Node> n, int row, int column)
 {
-    char value = n.GetState()[row][column];
+    char value = n->GetState()[row][column];
     return (value == '#' || value == 'X' || value == 'O');
 }
 
-int IsolationEngine::Utility(Node n)
+int IsolationEngine::Utility(shared_ptr<Node> n)
 {
     int otherPlayersOptions = GetSuccessors(n).size();
 
@@ -270,7 +274,7 @@ int IsolationEngine::Utility(Node n)
 
     // This is a theoretical state where it is this player's move again.
     // This allows us to estimate how many move options this player has.
-    Node alternateMove = Node(n.GetState(), !n.ComputerTurnNext(), n.LastMove());
+    auto alternateMove = make_shared<Node>(n->GetState(), !n->ComputerTurnNext(), n->LastMove());
     int thisPlayersOptions = GetSuccessors(alternateMove).size();
 
     // check if this player lost

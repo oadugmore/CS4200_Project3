@@ -9,7 +9,7 @@ class Opponent : public Player
 {
 public:
 	Opponent(UserInterface* ui, GameEngine* engine);
-	Node GetMove(Node currentState) override;
+    shared_ptr<Node> GetMove(shared_ptr<Node> currentState) override;
 	~Opponent();
 
 private:
