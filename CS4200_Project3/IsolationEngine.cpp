@@ -1,6 +1,7 @@
 #include "IsolationEngine.h"
 #include <limits>
 #include <array>
+#include <iostream>
 
 const int ROW_COUNT = 8;
 using std::array;
@@ -76,79 +77,133 @@ vector<Node> IsolationEngine::GetSuccessors(Node n)
 {
     vector<Node> successors;
     array<array<char, 8>, 8> state = n.GetState();
-    int posX, posY;
-    FindActivePlayer(n, posX, posY);
+    int playerRow, playerColumn;
+    FindActivePlayer(n, playerRow, playerColumn);
 
-    // check horizontal
-    for (int x = 0; x < 8; x++)
+    // check right
+    for (int col = playerColumn + 1; col < 8; col++)
     {
-        if (!IsOccupied(n, x, posY))
+        if (!IsOccupied(n, playerRow, col))
         {
-            successors.push_back(Move(n, posX, posY, x, posY));
+            successors.push_back(Move(n, playerRow, playerColumn, playerRow, col));
+        }
+        else
+        {
+            break;
         }
     }
 
-    // check vertical
-    for (int y = 0; y < 8; y++)
+    // check left
+    for (int col = playerColumn - 1; col > -1; col--)
     {
-        if (!IsOccupied(n, posX, y))
+        if (!IsOccupied(n, playerRow, col))
         {
-            successors.push_back(Move(n, posX, posY, posX, y));
+            successors.push_back(Move(n, playerRow, playerColumn, playerRow, col));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    // check up
+    for (int row = playerRow - 1; row > -1; row--)
+    {
+        if (!IsOccupied(n, row, playerColumn))
+        {
+            successors.push_back(Move(n, playerRow, playerColumn, row, playerColumn));
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    // check down
+    for (int row = playerRow + 1; row < 8; row++)
+    {
+        if (!IsOccupied(n, row, playerColumn))
+        {
+            successors.push_back(Move(n, playerRow, playerColumn, row, playerColumn));
+        }
+        else
+        {
+            break;
         }
     }
 
     // check top right
-    int checkX = posX + 1;
-    int checkY = posY + 1;
+    int checkX = playerRow + 1;
+    int checkY = playerColumn + 1;
     while (PositionExists(checkX, checkY))
     {
         if (!IsOccupied(n, checkX, checkY))
         {
-            successors.push_back(Move(n, posX, posY, checkX, checkY));
+            successors.push_back(Move(n, playerRow, playerColumn, checkX, checkY));
+            checkX++;
+            checkY++;
         }
-        checkX++;
-        checkY++;
+        else
+        {
+            break;
+        }
     }
 
     // check bottom right
-    checkX = posX + 1;
-    checkY = posY - 1;
+    checkX = playerRow + 1;
+    checkY = playerColumn - 1;
     while (PositionExists(checkX, checkY))
     {
         if (!IsOccupied(n, checkX, checkY))
         {
-            successors.push_back(Move(n, posX, posY, checkX, checkY));
+            successors.push_back(Move(n, playerRow, playerColumn, checkX, checkY));
+            checkX++;
+            checkY--;
         }
-        checkX++;
-        checkY--;
+        else
+        {
+            break;
+        }
     }
 
     // check bottom left
-    checkX = posX - 1;
-    checkY = posY - 1;
+    checkX = playerRow - 1;
+    checkY = playerColumn - 1;
     while (PositionExists(checkX, checkY))
     {
         if (!IsOccupied(n, checkX, checkY))
         {
-            successors.push_back(Move(n, posX, posY, checkX, checkY));
+            successors.push_back(Move(n, playerRow, playerColumn, checkX, checkY));
+            checkX--;
+            checkY--;
         }
-        checkX--;
-        checkY--;
+        else
+        {
+            break;
+        }
     }
 
     // check top left
-    checkX = posX - 1;
-    checkY = posY + 1;
+    checkX = playerRow - 1;
+    checkY = playerColumn + 1;
     while (PositionExists(checkX, checkY))
     {
         if (!IsOccupied(n, checkX, checkY))
         {
-            successors.push_back(Move(n, posX, posY, checkX, checkY));
+            successors.push_back(Move(n, playerRow, playerColumn, checkX, checkY));
+            checkX--;
+            checkY++;
         }
-        checkX--;
-        checkY++;
+        else
+        {
+            break;
+        }
     }
 
+    /*for (int i = 0; i < successors.size(); i++)
+    {
+        std::cout << successors[i].LastMove()[0] << ", " << successors[i].LastMove()[1] << std::endl;
+    }*/
     return successors;
 }
 
@@ -157,16 +212,16 @@ bool IsolationEngine::PositionExists(int x, int y)
     return (x < 8 && x > -1 && y < 8 && y > -1);
 }
 
-Node IsolationEngine::Move(Node current, int currentX, int currentY, int newX, int newY)
+Node IsolationEngine::Move(Node current, int currentRow, int currentColumn, int newRow, int newColumn)
 {
     char player = current.ComputerTurnNext() ? 'X' : 'O';
     array<array<char, 8>, 8> newState = current.GetState();
-    newState[currentX][currentY] = '#';
-    newState[newX][newY] = player;
-    return Node(newState, !current.ComputerTurnNext(), { newX, newY });
+    newState[currentRow][currentColumn] = '#';
+    newState[newRow][newColumn] = player;
+    return Node(newState, !current.ComputerTurnNext(), { newRow, newColumn });
 }
 
-void IsolationEngine::FindActivePlayer(Node n, int& x, int& y)
+void IsolationEngine::FindActivePlayer(Node n, int& row, int& column)
 {
     char player = n.ComputerTurnNext() ? 'X' : 'O';
     array<array<char, 8>, 8> state = n.GetState();
@@ -177,17 +232,17 @@ void IsolationEngine::FindActivePlayer(Node n, int& x, int& y)
         {
             if (state[i][j] == player)
             {
-                x = i;
-                y = j;
+                row = i;
+                column = j;
                 return;
             }
         }
     }
 }
 
-bool IsolationEngine::IsOccupied(Node n, int x, int y)
+bool IsolationEngine::IsOccupied(Node n, int row, int column)
 {
-    char value = n.GetState()[x][y];
+    char value = n.GetState()[row][column];
     return (value == '#' || value == 'X' || value == 'O');
 }
 

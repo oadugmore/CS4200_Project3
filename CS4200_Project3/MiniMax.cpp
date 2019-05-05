@@ -12,18 +12,19 @@ MiniMax::MiniMax(GameEngine* gameEngine, int timeout)
 	firstMove = true;
 }
 
-// Check if current search has taken more than the set timeout
+// Check if current search has taken over (1 second less than) the set timeout.
 bool MiniMax::TimesUp()
 {
 	auto currentTime = high_resolution_clock::now();
 	auto elapsed = currentTime - startTime;
 	float seconds = elapsed.count() / 1000000000;
-	return (seconds > 19);
+	return (seconds > timeout - 1);
 }
 
 Node MiniMax::GetMove(Node currentState)
 {
 	// initialize hash table
+    hashTable.clear();
 
 	int depth = 1;
 	startTime = high_resolution_clock::now();

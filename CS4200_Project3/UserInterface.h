@@ -12,6 +12,8 @@ using std::array;
 class UserInterface
 {
 public:
+    UserInterface();
+
 	// Asks the user to enter an integer, and returns a validated int from the user's input.
 	int GetTimeLimit();
 
@@ -26,6 +28,9 @@ public:
 
 	// Asks the user to enter a move, and returns a pair of coordinates for the desired move.
 	array<int, 2> GetMove();
+
+    // Delete previously entered move and inform the user that it was not valid.
+    void InvalidMove();
 
 	void DisplayBoard(Node board);
 

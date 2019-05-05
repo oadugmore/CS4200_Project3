@@ -13,6 +13,11 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+UserInterface::UserInterface()
+{
+    //moves = vector<string>();
+}
+
 int UserInterface::GetTimeLimit()
 {
     cout << "Enter the time limit, in seconds: ";
@@ -60,7 +65,11 @@ array<int, 2> UserInterface::GetMove()
     {
         if (cin >> input && ValidMove(input))
         {
-            moves.push_back("" + toupper(static_cast<unsigned char>(input[0])) + input[1]);
+            string move;
+            char c = toupper(static_cast<unsigned char>(input[0]));
+            move += c;
+            move += input[1];
+            moves.push_back(move);
             return { CharToInt(input[0]), input[1] - '1' };
         }
         else
@@ -93,6 +102,12 @@ char UserInterface::IntToChar(int i)
     return ('A' + i);
 }
 
+void UserInterface::InvalidMove()
+{
+    moves.pop_back();
+    cout << endl << "That move is not valid." << endl;
+}
+
 void UserInterface::DisplayBoard(Node board)
 {
     cout << endl;
@@ -103,7 +118,12 @@ void UserInterface::DisplayBoard(Node board)
     // for the first move there is no "last move."
     if (computerMove[0] != -1)
     {
-        moves.push_back("" + IntToChar(computerMove[0]) + (computerMove[1] + 1));
+        string move;
+        move += IntToChar(computerMove[0]);
+        move += ('1' + computerMove[1]);
+        /*cout << "NUM : " << num << endl;
+        move += num;*/
+        moves.push_back(move);
     }
 
     int lines = 0;
@@ -120,13 +140,18 @@ void UserInterface::DisplayBoard(Node board)
         }
 
         // print move history
+        if (lines >= ROW_COUNT)
+        {
+            cout << "\t\t";
+        }
+
         if (lines * 2 < moves.size())
         {
             cout << "\t" << moves[lines * 2];
         }
         if (lines * 2 + 1 < moves.size())
         {
-            cout << "\t" << moves[lines * 2 + 1];
+            cout << "\t\t" << moves[lines * 2 + 1];
         }
 
         cout << endl;
