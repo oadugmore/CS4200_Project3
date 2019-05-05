@@ -21,10 +21,11 @@ public:
 private:
     unordered_map<int, shared_ptr<Node>> hashTable;
     GameEngine* gameEngine;
+    int movesGenerated;
 	bool firstMove;
 	int timeout;
     time_point<high_resolution_clock> startTime;
-    shared_ptr<Node> AlphaBetaSearch(shared_ptr<Node> currentState, int depth);
+    int AlphaBetaSearch(shared_ptr<Node> currentState, int depth);
     shared_ptr<Node> AlphaBetaRandomBest(shared_ptr<Node> currentState, int depth);
 	int MaxValue(shared_ptr<Node> currentState, int alpha, int beta, int depth);
 	int MinValue(shared_ptr<Node> currentState, int alpha, int beta, int depth);

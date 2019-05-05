@@ -262,20 +262,43 @@ bool IsolationEngine::IsOccupied(shared_ptr<Node> n, int row, int column)
     return (value == '#' || value == 'X' || value == 'O');
 }
 
-int IsolationEngine::Utility(shared_ptr<Node> n)
+// Evaluates the state. 'forComputer' specifies if the value should be calculated
+// from the point of view of the computer or the opponent.
+int IsolationEngine::Utility(shared_ptr<Node> n, bool forComputer)
 {
-    int otherPlayersOptions = GetSuccessors(n).size();
+    int otherPlayersOptions = 0, thisPlayersOptions = 0; 
+    
+    // determine if the successors of this state are 'this' player's options or
+    // the other player's options.
+    if (forComputer == n->ComputerTurnNext())
+    {
+        thisPlayersOptions = GetSuccessors(n).size();
+    }
+    else
+    {
+        otherPlayersOptions = GetSuccessors(n).size();
+    }
+
+    // This is a theoretical state where it is this player's move again.
+    // This allows us to estimate how many move options this player has.
+    auto alternateMove = make_shared<Node>(n->GetState(), !n->ComputerTurnNext(), n->LastMove());
+    
+    // determine if the successors of the alternate state are 'this' player's options
+    // or the other player's options.
+    if (forComputer == alternateMove->ComputerTurnNext())
+    {
+        thisPlayersOptions = GetSuccessors(alternateMove).size();
+    }
+    else
+    {
+        otherPlayersOptions = GetSuccessors(alternateMove).size();
+    }
 
     // check if this player won
     if (otherPlayersOptions == 0)
     {
         return numeric_limits<int>::max();
     }
-
-    // This is a theoretical state where it is this player's move again.
-    // This allows us to estimate how many move options this player has.
-    auto alternateMove = make_shared<Node>(n->GetState(), !n->ComputerTurnNext(), n->LastMove());
-    int thisPlayersOptions = GetSuccessors(alternateMove).size();
 
     // check if this player lost
     if (thisPlayersOptions == 0)
@@ -285,6 +308,5 @@ int IsolationEngine::Utility(shared_ptr<Node> n)
 
     // not a terminal state, so evaluate based on the number of this player's options compared to
     // the opponent's number of options, giving twice as much weight to the opponent's options.
-    return thisPlayersOptions - 2 * otherPlayersOptions;
-
+    return thisPlayersOptions - 3 * otherPlayersOptions;
 }
