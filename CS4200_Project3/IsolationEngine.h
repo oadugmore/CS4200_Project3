@@ -20,6 +20,7 @@ public:
     int Utility(Node n) override;
 	void FindActivePlayer(Node n, int& x, int& y) override;
 	Node Move(Node current, int currentX, int currentY, int newX, int newY) override;
+    bool TerminalTest(Node state);
 
 private: 
 	UserInterface ui;

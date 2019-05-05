@@ -13,11 +13,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-UserInterface::UserInterface()
-{
-    //moves = vector<string>();
-}
-
 int UserInterface::GetTimeLimit()
 {
     cout << "Enter the time limit, in seconds: ";
@@ -121,8 +116,6 @@ void UserInterface::DisplayBoard(Node board)
         string move;
         move += IntToChar(computerMove[0]);
         move += ('1' + computerMove[1]);
-        /*cout << "NUM : " << num << endl;
-        move += num;*/
         moves.push_back(move);
     }
 
@@ -164,4 +157,10 @@ void UserInterface::DisplayBoard(Node board)
         cout << "Computer's move is: " << moves[moves.size() - 1] << endl;
     }
 
+}
+
+void UserInterface::PrintResults(char winner)
+{
+    cout << endl << endl;
+    cout << "WINNER: " << winner << endl;
 }

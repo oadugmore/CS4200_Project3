@@ -12,19 +12,11 @@ using std::array;
 class UserInterface
 {
 public:
-    UserInterface();
-
 	// Asks the user to enter an integer, and returns a validated int from the user's input.
 	int GetTimeLimit();
 
-	// Asks the user to enter a decimal number, and returns a validated double from the user's input.
-	//virtual double GetDouble() = 0;
-
 	// Asks the user which player should start, and returns true if the computer should start.
 	bool ComputerStarts();
-
-	// Asks the user to enter a string, and returns the inputted string.
-	//virtual std::string GetString() = 0;
 
 	// Asks the user to enter a move, and returns a pair of coordinates for the desired move.
 	array<int, 2> GetMove();
@@ -32,7 +24,10 @@ public:
     // Delete previously entered move and inform the user that it was not valid.
     void InvalidMove();
 
+    // Updates the board display with the new state.
 	void DisplayBoard(Node board);
+
+    void PrintResults(char winner);
 
 private:
     bool ValidMove(string move);

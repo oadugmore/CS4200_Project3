@@ -55,6 +55,13 @@ void IsolationEngine::GameLoop(Node initialState)
             ui.DisplayBoard(currentState);
         }
 
+        // test if game over
+        if (TerminalTest(currentState))
+        {
+            ui.PrintResults(currentPlayer == &*opponent ? 'O' : 'X');
+            break;
+        }
+
         SwitchTurns(!currentState.ComputerTurnNext());
     }
 }
@@ -221,6 +228,11 @@ Node IsolationEngine::Move(Node current, int currentRow, int currentColumn, int 
     return Node(newState, !current.ComputerTurnNext(), { newRow, newColumn });
 }
 
+bool IsolationEngine::TerminalTest(Node state)
+{
+    return GetSuccessors(state).size() == 0;
+}
+
 void IsolationEngine::FindActivePlayer(Node n, int& row, int& column)
 {
     char player = n.ComputerTurnNext() ? 'X' : 'O';
@@ -257,23 +269,18 @@ int IsolationEngine::Utility(Node n)
     }
 
     // This is a theoretical state where it is this player's move again.
-    // This allows us to estimate how many move options this player would have.
+    // This allows us to estimate how many move options this player has.
     Node alternateMove = Node(n.GetState(), !n.ComputerTurnNext(), n.LastMove());
     int thisPlayersOptions = GetSuccessors(alternateMove).size();
 
+    // check if this player lost
     if (thisPlayersOptions == 0)
     {
         return numeric_limits<int>::min();
     }
 
-    // use heuristic
+    // not a terminal state, so evaluate based on the number of this player's options compared to
+    // the opponent's number of options, giving twice as much weight to the opponent's options.
+    return thisPlayersOptions - 2 * otherPlayersOptions;
 
 }
-
-//bool IsolationEngine::TerminalTest(Node n)
-//{
-//
-//}
-
-
-
