@@ -73,12 +73,10 @@ void IsolationEngine::SwitchTurns(bool opponentTurnNext)
     if (opponentTurnNext)
     {
         currentPlayer = &*opponent;
-        //computerTurn = true;
     }
     else
     {
         currentPlayer = &*computer;
-        //computerTurn = false;
     }
 }
 
@@ -209,10 +207,6 @@ vector<shared_ptr<Node>> IsolationEngine::GetSuccessors(shared_ptr<Node> n)
         }
     }
 
-    /*for (int i = 0; i < successors.size(); i++)
-    {
-        std::cout << successors[i].LastMove()[0] << ", " << successors[i].LastMove()[1] << std::endl;
-    }*/
     return successors;
 }
 
@@ -229,7 +223,6 @@ shared_ptr<Node> IsolationEngine::Move(shared_ptr<Node> current, int currentRow,
     newState[newRow][newColumn] = player;
     array<int, 2> lastMove = { newRow, newColumn };
     return make_shared<Node>(newState, !current->ComputerTurnNext(), lastMove);
-    //auto node2 = make_shared<Node>(newState, !current->ComputerTurnNext(), { newRow, newColumn });
 }
 
 bool IsolationEngine::TerminalTest(shared_ptr<Node> state)
@@ -241,7 +234,6 @@ void IsolationEngine::FindActivePlayer(shared_ptr<Node> n, int& row, int& column
 {
     char player = n->ComputerTurnNext() ? 'X' : 'O';
     array<array<char, 8>, 8> state = n->GetState();
-    //int posX, posY;
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)

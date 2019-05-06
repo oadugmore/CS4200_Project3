@@ -42,13 +42,14 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
         shared_ptr<Node> bestMove(nullptr);
         try
         {
-                while (!TimesUp())
+            while (!TimesUp())
             {
                 depth++;
                 bestMove = AlphaBetaRandomBest(currentState, depth);
             }
         }
         catch (TimesUpException) {}
+        cout << endl << "I searched to a depth of " << depth << "." << endl;
         return bestMove;
     }
 
@@ -57,7 +58,7 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
     {
         try
         {
-                while (!TimesUp())
+            while (!TimesUp())
             {
                 depth++;
                 bestMoveValue = AlphaBetaSearch(currentState, depth);
@@ -71,8 +72,8 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
         }
         catch (TimesUpException) {}
 
-        cout << endl << "I searched to a depth of " << depth << endl;
-        cout << "and hashed " << hashTable.size() << " options." << endl;
+        cout << endl << "I searched to a depth of " << depth << "." << endl;
+        //cout << "and hashed " << hashTable.size() << " options." << endl;
 
         return hashTable[bestMoveValue];
     }
@@ -105,7 +106,7 @@ int MiniMax::AlphaBetaSearch(shared_ptr<Node> currentState, int depth)
             break;
         }
     }
-    cout << "Current value: " << v << endl;
+    //cout << "Current value: " << v << endl;
     return v;
 }
 
@@ -151,7 +152,7 @@ shared_ptr<Node> MiniMax::AlphaBetaRandomBest(shared_ptr<Node> currentState, int
     // choose randomly between the best options
     RandomGeneration randGen;
     int choice = randGen.RandomZeroToN(bestOptions.size() - 1);
-    cout << "Current value: " << v << endl;
+    //cout << "Current value: " << v << endl;
     return bestOptions[choice];
 }
 
