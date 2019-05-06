@@ -3,7 +3,6 @@
 #include <limits>
 #include <cctype>
 
-
 const int ROW_COUNT = 8;
 using std::numeric_limits;
 using std::streamsize;

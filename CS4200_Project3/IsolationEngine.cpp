@@ -13,9 +13,9 @@ IsolationEngine::IsolationEngine()
     currentPlayer = &*computer;
 }
 
+// Initializes the game engine and begins the game.
 void IsolationEngine::Start()
 {
-    // initialize game engine
     int timeout = ui.GetTimeLimit();
     computer = make_unique<MiniMax>(this, timeout);
     opponent = make_unique<Opponent>(&ui, this);
@@ -68,6 +68,7 @@ void IsolationEngine::GameLoop(shared_ptr<Node> initialState)
     }
 }
 
+// Switches the active player.
 void IsolationEngine::SwitchTurns(bool opponentTurnNext)
 {
     if (opponentTurnNext)
@@ -80,6 +81,7 @@ void IsolationEngine::SwitchTurns(bool opponentTurnNext)
     }
 }
 
+// Gets a collection of states that can be reached on the next move.
 vector<shared_ptr<Node>> IsolationEngine::GetSuccessors(shared_ptr<Node> n)
 {
     vector<shared_ptr<Node>> successors;

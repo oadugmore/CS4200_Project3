@@ -27,6 +27,7 @@ public:
     // Updates the board display with the new state.
 	void DisplayBoard(shared_ptr<Node> board);
 
+    // Prints the winning player.
     void PrintResults(char winner);
 
 private:

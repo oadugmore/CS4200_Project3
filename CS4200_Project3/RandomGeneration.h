@@ -1,7 +1,7 @@
 #pragma once
 #include <random>
 
-using namespace std;
+using std::default_random_engine;
 
 class RandomGeneration
 {

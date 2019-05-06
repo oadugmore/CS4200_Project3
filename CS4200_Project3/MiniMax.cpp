@@ -3,6 +3,11 @@
 #include <limits>
 #include <iostream>
 
+using std::exception;
+using std::cout;
+using std::endl;
+using std::numeric_limits;
+
 struct TimesUpException : public exception { };
 
 MiniMax::MiniMax(GameEngine* gameEngine, int timeout)
@@ -49,7 +54,7 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
             }
         }
         catch (TimesUpException) {}
-        cout << endl << "I searched to a depth of " << depth << "." << endl;
+        cout << endl << "Searched to a depth of " << depth << "." << endl;
         return bestMove;
     }
 
@@ -64,15 +69,15 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
                 bestMoveValue = AlphaBetaSearch(currentState, depth);
                 if (bestMoveValue <= numeric_limits<int>::min() || bestMoveValue >= numeric_limits<int>::max())
                 {
-                    cout << endl << "FOUND TERMINAL STATE" << endl;
-                    if (bestMoveValue > 0) cout << ";)" << endl;
+                    cout << endl << "APPROACHING TERMINAL STATE";
+                    if (bestMoveValue > 0) cout << " ;)" << endl;
                     break;
                 }
             }
         }
         catch (TimesUpException) {}
 
-        cout << endl << "I searched to a depth of " << depth << "." << endl;
+        cout << endl << "Searched to a depth of " << depth << "." << endl;
         //cout << "and hashed " << hashTable.size() << " options." << endl;
 
         return hashTable[bestMoveValue];

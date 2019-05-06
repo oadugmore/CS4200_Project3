@@ -1,7 +1,11 @@
 #include "RandomGeneration.h"
 #include <iostream>
 
-
+using std::random_device;
+using std::exception;
+using std::cout;
+using std::endl;
+using std::uniform_int_distribution;
 
 RandomGeneration::RandomGeneration()
 {

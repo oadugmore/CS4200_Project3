@@ -10,11 +10,6 @@ Opponent::Opponent(UserInterface* ui, GameEngine * engine)
     this->engine = engine;
 }
 
-
-Opponent::~Opponent()
-{
-}
-
 shared_ptr<Node> Opponent::GetMove(shared_ptr<Node> currentState)
 {
     vector<shared_ptr<Node>> possibleMoves = engine->GetSuccessors(currentState);
