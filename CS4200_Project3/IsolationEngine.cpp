@@ -300,5 +300,5 @@ int IsolationEngine::Utility(shared_ptr<Node> n, bool forComputer)
 
     // not a terminal state, so evaluate based on the number of this player's options compared to
     // the opponent's number of options, giving twice as much weight to the opponent's options.
-    return thisPlayersOptions - 3 * otherPlayersOptions;
+    return thisPlayersOptions - 2 * otherPlayersOptions;
 }
