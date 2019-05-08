@@ -302,5 +302,11 @@ int IsolationEngine::Utility(shared_ptr<Node> n, bool forComputer)
 
     // not a terminal state, so evaluate based on the number of this player's options compared to
     // the opponent's number of options, giving twice as much weight to the opponent's options.
-    return thisPlayersOptions - 2 * otherPlayersOptions;
+    int optionScore = thisPlayersOptions - 2 * otherPlayersOptions;
+    int row, col;
+    auto state = n->GetState();
+    FindActivePlayer(forComputer && n->ComputerTurnNext() ? n : alternateMove, row, col);
+    int rowDistance = static_cast<int>(abs(3.5f - row));
+    int colDistance = static_cast<int>(abs(3.5f - col));
+    return optionScore - (rowDistance + colDistance);
 }
