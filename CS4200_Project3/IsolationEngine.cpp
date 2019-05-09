@@ -304,32 +304,36 @@ int IsolationEngine::Utility(shared_ptr<Node> n, bool forComputer)
     // the opponent's number of options, giving twice as much weight to the opponent's options.
     int optionScore = thisPlayersOptions - 2 * otherPlayersOptions;
 
-    int row, col;
+    int playerRow, playerCol, oppRow, oppCol;
     auto state = n->GetState();
-    FindActivePlayer(forComputer && n->ComputerTurnNext() ? n : alternateMove, row, col);
+    FindActivePlayer(forComputer && n->ComputerTurnNext() ? n : alternateMove, playerRow, playerCol);
+    FindActivePlayer(forComputer && n->ComputerTurnNext() ? alternateMove : n, oppRow, oppCol);
 
     int emptySpaces = 0;
-    for (int j = col - 1; j < col + 2; j++)
+    for (int j = playerCol - 1; j < playerCol + 2; j++)
     {
-        if (row + 1 < 8 && j > -1 && j < 8 && state[row + 1][j] == '-')
+        if (playerRow + 1 < 8 && j > -1 && j < 8 && state[playerRow + 1][j] == '-')
         {
             emptySpaces++;
         }
-        if (row - 1 > -1 && j > -1 && j < 8 && state[row - 1][j] == '-')
+        if (playerRow - 1 > -1 && j > -1 && j < 8 && state[playerRow - 1][j] == '-')
         {
             emptySpaces++;
         }
     }
-    if (col - 1 > -1 && state[row][col - 1] == '-')
+    if (playerCol - 1 > -1 && state[playerRow][playerCol - 1] == '-')
     {
         emptySpaces++;
     }
-    if (col + 1 < 8 && state[row][col + 1] == '-')
+    if (playerCol + 1 < 8 && state[playerRow][playerCol + 1] == '-')
     {
         emptySpaces++;
     }
 
-    int rowDistance = static_cast<int>(abs(3.5f - row));
-    int colDistance = static_cast<int>(abs(3.5f - col));
-    return optionScore - (rowDistance + colDistance) + emptySpaces;
+    int playerRowDistance = static_cast<int>((3.5f - playerRow) * (3.5f - playerRow));
+    int playerColDistance = static_cast<int>((3.5f - playerCol) * (3.5f - playerCol));
+    int oppRowDistance = static_cast<int>((3.5f - oppRow) * (3.5f - oppRow));
+    int oppColDistance = static_cast<int>((3.5f - oppCol) * (3.5f - oppCol));
+    return (thisPlayersOptions * emptySpaces) * (oppRowDistance + oppColDistance)
+        - (otherPlayersOptions * otherPlayersOptions) * (playerRowDistance + playerColDistance);
 }
