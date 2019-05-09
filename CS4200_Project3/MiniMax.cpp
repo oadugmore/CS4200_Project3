@@ -37,7 +37,7 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
     startTime = high_resolution_clock::now();
     int bestMoveValue;
 
-    cout << endl << "Thinking..." << endl;
+    cout << endl << "Thinking...";
 
     // "if there are multiple optimal moves that result in the same evaluation value,
     // it must randomly choose from those moves"
@@ -69,7 +69,7 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
                 bestMoveValue = AlphaBetaSearch(currentState, depth);
                 if (bestMoveValue <= numeric_limits<int>::min() || bestMoveValue >= numeric_limits<int>::max())
                 {
-                    cout << endl << "APPROACHING TERMINAL STATE";
+                    cout << endl << endl << "APPROACHING TERMINAL STATE";
                     if (bestMoveValue > 0) cout << " ;)" << endl;
                     break;
                 }
@@ -77,7 +77,7 @@ shared_ptr<Node> MiniMax::GetMove(shared_ptr<Node> currentState)
         }
         catch (TimesUpException) {}
 
-        cout << endl << "Searched to a depth of " << depth << "." << endl;
+        cout << endl << endl << "Searched to a depth of " << depth << "." << endl;
         //cout << "and hashed " << hashTable.size() << " options." << endl;
 
         return hashTable[bestMoveValue];

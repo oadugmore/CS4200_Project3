@@ -60,7 +60,7 @@ void IsolationEngine::GameLoop(shared_ptr<Node> initialState)
         // test if game over
         if (TerminalTest(currentState))
         {
-            ui.PrintResults(currentPlayer == &*opponent ? 'O' : 'X');
+            ui.PrintResults(currentState);
             break;
         }
 
@@ -303,10 +303,33 @@ int IsolationEngine::Utility(shared_ptr<Node> n, bool forComputer)
     // not a terminal state, so evaluate based on the number of this player's options compared to
     // the opponent's number of options, giving twice as much weight to the opponent's options.
     int optionScore = thisPlayersOptions - 2 * otherPlayersOptions;
+
     int row, col;
     auto state = n->GetState();
     FindActivePlayer(forComputer && n->ComputerTurnNext() ? n : alternateMove, row, col);
+
+    int emptySpaces = 0;
+    for (int j = col - 1; j < col + 2; j++)
+    {
+        if (row + 1 < 8 && j > -1 && j < 8 && state[row + 1][j] == '-')
+        {
+            emptySpaces++;
+        }
+        if (row - 1 > -1 && j > -1 && j < 8 && state[row - 1][j] == '-')
+        {
+            emptySpaces++;
+        }
+    }
+    if (col - 1 > -1 && state[row][col - 1] == '-')
+    {
+        emptySpaces++;
+    }
+    if (col + 1 < 8 && state[row][col + 1] == '-')
+    {
+        emptySpaces++;
+    }
+
     int rowDistance = static_cast<int>(abs(3.5f - row));
     int colDistance = static_cast<int>(abs(3.5f - col));
-    return optionScore - (rowDistance + colDistance);
+    return optionScore - (rowDistance + colDistance) + emptySpaces;
 }

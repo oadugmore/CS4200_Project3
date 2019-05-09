@@ -28,7 +28,7 @@ public:
 	void DisplayBoard(shared_ptr<Node> board);
 
     // Prints the winning player.
-    void PrintResults(char winner);
+    void PrintResults(shared_ptr<Node> finalState);
 
 private:
     bool ValidMove(string move);

@@ -11,6 +11,7 @@ using std::toupper;
 using std::cin;
 using std::cout;
 using std::endl;
+using std::make_shared;
 
 int UserInterface::GetTimeLimit()
 {
@@ -158,8 +159,15 @@ void UserInterface::DisplayBoard(shared_ptr<Node> board)
 
 }
 
-void UserInterface::PrintResults(char winner)
+void UserInterface::PrintResults(shared_ptr<Node> finalState)
 {
+    char winner = finalState->ComputerTurnNext() ? 'O' : 'X';
+    if (winner == 'O')
+    {
+        array<int, 2> nullMove = { -1 };
+        auto printState = make_shared<Node>(finalState->GetState(), finalState->ComputerTurnNext(), nullMove);
+        DisplayBoard(printState);
+    }
     cout << endl << endl;
     cout << "WINNER: " << winner << endl;
 }
